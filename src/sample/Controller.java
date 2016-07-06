@@ -47,6 +47,7 @@ public class Controller {
 
         //Instruction setup
         instruction.getItems().add("MOVE");
+        instruction.getItems().add("ADD");
         source.getItems().addAll(getRegsStrings());
         destination.getItems().addAll(getRegsStrings());
 
@@ -54,7 +55,11 @@ public class Controller {
         getCommand.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                cpu.getInstructionSet().moveRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+                if(instruction.getSelectionModel().getSelectedItem().toString() == "MOVE")
+                    cpu.getInstructionSet().moveRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+                else if(instruction.getSelectionModel().getSelectedItem().toString() == "ADD")
+                    cpu.getInstructionSet().addRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+
                 int sindex = source.getSelectionModel().getSelectedIndex();
                 int dindex = destination.getSelectionModel().getSelectedIndex();
                 Label lsindex = (Label)Dregs.getChildren().get(sindex);

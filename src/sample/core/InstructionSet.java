@@ -17,6 +17,12 @@ public class InstructionSet {
         cpu.setD(sourceReg,destReg);
     }
 
+    public void addRegToReg(String source,String destination){
+        Integer sourceReg = decodeRegister(source);
+        Integer destReg = decodeRegister(destination);
+        cpu.setD(sourceReg+destReg,destReg);
+    }
+
     private Integer decodeRegister(String regName){
 
         switch(regName){

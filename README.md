@@ -3,4 +3,5 @@ CPUemu it's an attempt to create a working CPU-MEMORY system. The CPU registers 
 
 # Working commands :
 
-* Move between Data registers (e.g : MOVE D0,D1)
+* Move between Data registers       (e.g : MOVE D0,D1)
+* Addition between data registers   (e.g : ADD  D1,D2)
