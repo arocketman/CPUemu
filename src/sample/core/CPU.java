@@ -17,9 +17,9 @@ public class CPU {
 
 
     private InstructionSet instructionSet;
-    private ArrayList<Integer> D; //data registers - 32 bits
-    private ArrayList<Integer> A; //address registers - 32bits
-    private short SR; //status register - 16bits
+    private ArrayList<Integer> D;               //data registers - 32 bits
+    private ArrayList<Integer> A;               //address registers - 32bits
+    private short SR;                           //status register - 16bits
     private int PC;
 
     public CPU(){
@@ -43,11 +43,20 @@ public class CPU {
         return D.get(index);
     }
 
-    public void setD(Integer oldVal, Integer newVal){
+    /**
+     * Sets the value of a D register given a source and a destination register.
+     * Please note that the comparision with == and not equals is wanted.
+     * We actually want to compare the object's references and not their value.
+     * We want to make sure that different items inside the ArrayList aren't pointing to the same Object.
+     * Each element of the ArrayList must point to a different Object, different Objects -> different references.
+     * @param sourceVal
+     * @param destVal
+     */
+    public void setD(Integer sourceVal, Integer destVal){
         for(int i = 0; i <= 7; i++){
             //We want to actually compare references here.
-            if(newVal == getD(i)){
-                D.set(i,new Integer(oldVal));
+            if(destVal == getD(i)){
+                D.set(i,new Integer(sourceVal));
                 return;
             }
         }
