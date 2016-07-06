@@ -51,6 +51,11 @@
                                 <Label fx:id="A7" text="A0" />
                             </children>
                         </VBox>
+                        <VBox fx:id="regs" prefHeight="200.0" prefWidth="100.0">
+                            <children>
+                                <Label fx:id="SR" text="SR" />
+                            </children>
+                        </VBox>
                     </children>
                 </HBox>
                 <HBox prefHeight="100.0" prefWidth="200.0">

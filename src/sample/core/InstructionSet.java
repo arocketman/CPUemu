@@ -15,12 +15,14 @@ public class InstructionSet {
         Integer sourceReg = decodeRegister(source);
         Integer destReg = decodeRegister(destination);
         cpu.setD(sourceReg,destReg);
+        cpu.setSR(sourceReg);
     }
 
     public void addRegToReg(String source,String destination){
         Integer sourceReg = decodeRegister(source);
         Integer destReg = decodeRegister(destination);
         cpu.setD(sourceReg+destReg,destReg);
+        cpu.setSR(sourceReg+destReg);
     }
 
     private Integer decodeRegister(String regName){

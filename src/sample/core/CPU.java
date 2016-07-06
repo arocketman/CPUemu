@@ -74,8 +74,13 @@ public class CPU {
         return SR;
     }
 
-    public void setSR(short SR) {
-        this.SR = SR;
+    public void setSR(Integer SR) {
+        if(SR.equals(0))
+            this.SR = (short) (this.SR^0x4);
+        else
+            this.SR = (short) (this.SR&0xFFFB);
+
+
     }
 
     public int getPC() {

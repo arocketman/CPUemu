@@ -27,20 +27,22 @@ public class Controller {
     private ComboBox destination;
     @FXML
     private Button getCommand;
-
-    private CPU cpu;
+    @FXML
+    private Label SR;
 
     Sim system = new Sim();
 
     @FXML
     protected void initialize(){
-        cpu = new CPU();
 
         //Registers setup
         for(int i = 0; i <= 7; i++){
-            ((Label)Aregs.getChildren().get(i)).setText(("A" + i + "=" + String.format("%8s",Integer.toHexString(system.getCpu().getA(i))).replace(" ","0")));
+            ((Label)Aregs.getChildren().get(i)).setText("A" + i + "=" + getHexWithTrailingZeroes(system.getCpu().getA(i)));
             ((Label)Dregs.getChildren().get(i)).setText("D" + i + "=" + getHexWithTrailingZeroes(system.getCpu().getD(i)));
         }
+
+        SR.setText(getBinWithTrailingZeroes((int) system.getCpu().getSR()));
+        SR.setMinWidth(120);
 
         //Textarea setup
         Instructions.setEditable(false);
@@ -56,16 +58,17 @@ public class Controller {
             @Override
             public void handle(ActionEvent event) {
                 if(instruction.getSelectionModel().getSelectedItem().toString() == "MOVE")
-                    cpu.getInstructionSet().moveRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+                    system.getCpu().getInstructionSet().moveRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
                 else if(instruction.getSelectionModel().getSelectedItem().toString() == "ADD")
-                    cpu.getInstructionSet().addRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+                    system.getCpu().getInstructionSet().addRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
 
                 int sindex = source.getSelectionModel().getSelectedIndex();
                 int dindex = destination.getSelectionModel().getSelectedIndex();
                 Label lsindex = (Label)Dregs.getChildren().get(sindex);
                 Label ldindex = (Label)Dregs.getChildren().get(dindex);
-                lsindex.setText(lsindex.getText().substring(0,3) + getHexWithTrailingZeroes(cpu.getD(sindex)));
-                ldindex.setText(ldindex.getText().substring(0,3) + getHexWithTrailingZeroes(cpu.getD(dindex)));
+                lsindex.setText(lsindex.getText().substring(0,3) + getHexWithTrailingZeroes(system.getCpu().getD(sindex)));
+                ldindex.setText(ldindex.getText().substring(0,3) + getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
+                SR.setText(getBinWithTrailingZeroes((int) system.getCpu().getSR()));
 
                 Instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
             }
@@ -74,6 +77,10 @@ public class Controller {
 
     private String getHexWithTrailingZeroes(Integer value){
         return String.format("%8s",Integer.toHexString(value)).replace(" ","0");
+    }
+
+    private String getBinWithTrailingZeroes(Integer value){
+        return String.format("%16s" , Integer.toBinaryString(value)).replace(" ","0");
     }
 
     private String[] getRegsStrings(){
