@@ -14,11 +14,11 @@ public class Utils {
     }
 
     public static String getHexWithTrailingZeroes(Integer value){
-        return String.format("%8s",Integer.toHexString(value)).replace(" ","0");
+        return getLeadingZeroesVersion(8,Integer.toHexString(value));
     }
 
     public static String getBinWithTrailingZeroes(Integer value){
-        return String.format("%16s" , Integer.toBinaryString(value)).replace(" ","0");
+        return getLeadingZeroesVersion(16,Integer.toBinaryString(value));
     }
 
     public static String getLeadingZeroesVersion(int numZeroes,String str){

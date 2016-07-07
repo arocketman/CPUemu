@@ -32,6 +32,7 @@ public class Controller {
     private ListView<String> MemListView;
 
     private static int STATUS_REGISTER = 0;
+    private static int PROGRAM_COUNTER = 1;
 
     //Observable lists for the registers and memory ListViews.
     private ObservableList<String> ARegsObservable = FXCollections.observableArrayList();
@@ -58,6 +59,7 @@ public class Controller {
         MemListView.setItems(MemObservable);
 
         otherRegsObservable.add(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
+        otherRegsObservable.add(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
 
         //Textarea setup
         Instructions.setEditable(false);
@@ -88,17 +90,23 @@ public class Controller {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        //Updating the UI.
-                        int dindex = destination.getSelectionModel().getSelectedIndex();
-                        DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
-                        otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
-                        Instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
-
-                        updateMemoryUI();
+                        refreshUI();
                     }
                 });
             }
         });
+    }
+
+    private void refreshUI() {
+        //Updating the UI.
+        int dindex = destination.getSelectionModel().getSelectedIndex();
+        DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
+        otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
+        otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
+
+        Instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
+
+        updateMemoryUI();
     }
 
     private void updateMemoryUI(){
