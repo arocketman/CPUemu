@@ -19,7 +19,7 @@ public class InstructionSet {
                 cpu.setD(sourceReg,destReg);
                 cpu.setSR(sourceReg);
             break;
-            case "ADD" :
+            case "0ADD" :
                 cpu.setD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
             break;

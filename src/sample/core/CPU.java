@@ -20,17 +20,22 @@ public class CPU {
     private ArrayList<Integer> D;               //data registers - 32 bits
     private ArrayList<Integer> A;               //address registers - 32bits
     private short SR;                           //status register - 16bits
-    private int PC;
+    private int PC;                             //Program Counter
+    private byte[] IR;                            //Instruction register
 
     public CPU(){
         D = new ArrayList<>();
         A = new ArrayList<>();
+        IR = new byte[4];
 
         for(int i = 0; i <= 7; i++){
             D.add(new Integer(i));
             A.add(new Integer(i));
         }
         instructionSet = new InstructionSet(this);
+
+        //Start the program counter at the first address of the instruction area.
+        PC = Memory.INSTRUCTION_AREA;
     }
 
     public InstructionSet getInstructionSet() {
@@ -89,5 +94,17 @@ public class CPU {
 
     public void setPC(int PC) {
         this.PC = PC;
+    }
+
+    public byte[] getIR() {
+        return IR;
+    }
+
+    public void setIR(byte[] IR) {
+        this.IR = IR;
+    }
+
+    public void incrementPC4() {
+        this.PC += 4;
     }
 }

@@ -71,11 +71,16 @@ public class Controller {
         getCommand.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(instruction.getSelectionModel().getSelectedItem().toString() == "MOVE")
-                    system.getCpu().getInstructionSet().regToReg("MOVE",source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
-                else if(instruction.getSelectionModel().getSelectedItem().toString() == "ADD")
-                    system.getCpu().getInstructionSet().regToReg("ADD",source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
 
+                //We put the instruction in memory. The instruction is put in a way that it's always 4 bytes long. So
+                //ADD -> 0ADD , MOVE -> MOVE . This little hack helps a lot during the fetch phase.
+                String instruction4 = String.format("%4s", instruction.getSelectionModel().getSelectedItem().toString()).replace(" ","0");
+                system.getMemory().putInstruction( instruction4 + source.getSelectionModel().getSelectedItem().toString() + destination.getSelectionModel().getSelectedItem().toString());
+
+                //One Von Neumann cycle.
+                system.VonNeumann();
+
+                //Updating the UI.
                 int dindex = destination.getSelectionModel().getSelectedIndex();
                 DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
                 otherRegsObservable.set(STATUS_REGISTER,getBinWithTrailingZeroes((int) system.getCpu().getSR()));
