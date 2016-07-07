@@ -23,6 +23,10 @@ public class InstructionSet {
                 cpu.setD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
             break;
+            case "0SUB" :
+                cpu.setD(sourceReg-destReg,destReg);
+                cpu.setSR(sourceReg-destReg);
+            break;
         }
     }
 

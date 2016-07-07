@@ -54,7 +54,7 @@ public class Sim {
      */
     private String decode(String decodedInstruction){
         decodedInstruction += new String(cpu.getIR());
-        if(decodedInstruction.equals("MOVE") || decodedInstruction.equals("0ADD")){
+        if(decodedInstruction.equals("MOVE") || decodedInstruction.equals("0ADD") || decodedInstruction.equals("0SUB")){
                 //Getting the operands
                 fetch();
                 return decode(decodedInstruction);

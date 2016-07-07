@@ -70,8 +70,7 @@ public class Controller {
         MemListView.scrollTo(system.getCpu().getPC()+6);
 
         //Instruction setup
-        instruction.getItems().add("MOVE");
-        instruction.getItems().add("ADD");
+        instruction.getItems().addAll("MOVE","ADD","SUB");
         source.getItems().addAll(getRegsStrings());
         destination.getItems().addAll(getRegsStrings());
 
