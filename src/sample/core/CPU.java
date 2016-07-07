@@ -11,7 +11,7 @@ public class CPU {
     public static void main(String[] args) {
         CPU cpu = new CPU();
         cpu.D.set(0,0x2);
-        cpu.instructionSet.moveRegToReg("D0","D1");
+        cpu.instructionSet.regToReg("MOVE","D0","D1");
         System.out.println("ciao");
     }
 
@@ -76,7 +76,7 @@ public class CPU {
 
     public void setSR(Integer SR) {
         if(SR.equals(0))
-            this.SR = (short) (this.SR^0x4);
+            this.SR = (short) (this.SR|0x4);
         else
             this.SR = (short) (this.SR&0xFFFB);
 

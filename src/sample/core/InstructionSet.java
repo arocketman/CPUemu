@@ -11,18 +11,19 @@ public class InstructionSet {
         this.cpu = cpu;
     }
 
-    public void moveRegToReg(String source,String destination){
+    public void regToReg(String OP,String source,String destination){
         Integer sourceReg = decodeRegister(source);
         Integer destReg = decodeRegister(destination);
-        cpu.setD(sourceReg,destReg);
-        cpu.setSR(sourceReg);
-    }
-
-    public void addRegToReg(String source,String destination){
-        Integer sourceReg = decodeRegister(source);
-        Integer destReg = decodeRegister(destination);
-        cpu.setD(sourceReg+destReg,destReg);
-        cpu.setSR(sourceReg+destReg);
+        switch(OP){
+            case "MOVE" :
+                cpu.setD(sourceReg,destReg);
+                cpu.setSR(sourceReg);
+            break;
+            case "ADD" :
+                cpu.setD(sourceReg+destReg,destReg);
+                cpu.setSR(sourceReg+destReg);
+            break;
+        }
     }
 
     private Integer decodeRegister(String regName){

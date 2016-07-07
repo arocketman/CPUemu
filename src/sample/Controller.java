@@ -58,9 +58,9 @@ public class Controller {
             @Override
             public void handle(ActionEvent event) {
                 if(instruction.getSelectionModel().getSelectedItem().toString() == "MOVE")
-                    system.getCpu().getInstructionSet().moveRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+                    system.getCpu().getInstructionSet().regToReg("MOVE",source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
                 else if(instruction.getSelectionModel().getSelectedItem().toString() == "ADD")
-                    system.getCpu().getInstructionSet().addRegToReg(source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
+                    system.getCpu().getInstructionSet().regToReg("ADD",source.getSelectionModel().getSelectedItem().toString(),destination.getSelectionModel().getSelectedItem().toString());
 
                 int sindex = source.getSelectionModel().getSelectedIndex();
                 int dindex = destination.getSelectionModel().getSelectedIndex();
