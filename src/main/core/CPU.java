@@ -1,7 +1,6 @@
-package sample.core;
+package main.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Andreuccio on 06/07/2016.

@@ -1,16 +1,25 @@
-package sample.core;
+package main.core;
 
 /**
  * Created by Andreuccio on 06/07/2016.
  */
 public class Memory {
     private byte[] ram;
+
+    public static final int MEM_SIZE = 8000;
     public static final int INSTRUCTION_AREA = 4000;
     private int currentInstructionAddress;
 
     public Memory(){
-        ram = new byte[8000];
+        ram = new byte[MEM_SIZE];
+        for(int i = 0; i < MEM_SIZE; i++){
+            ram[i] = 00;
+        }
         currentInstructionAddress = INSTRUCTION_AREA;
+    }
+
+    public byte[] getRam() {
+        return ram;
     }
 
     public byte getValue1(int address){

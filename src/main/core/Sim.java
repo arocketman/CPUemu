@@ -1,4 +1,4 @@
-package sample.core;
+package main.core;
 
 
 import java.util.Arrays;

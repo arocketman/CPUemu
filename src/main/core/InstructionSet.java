@@ -1,4 +1,4 @@
-package sample.core;
+package main.core;
 
 /**
  * Created by Andreuccio on 06/07/2016.

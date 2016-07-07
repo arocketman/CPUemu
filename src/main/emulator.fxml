@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+   <children>
+              <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <children>
+      
+                      <TextArea fx:id="Instructions" prefHeight="199.0" prefWidth="800.0" VBox.vgrow="ALWAYS" />
+
+                      <HBox alignment="CENTER" prefWidth="200.0">
+                          <children>
+                              <ComboBox fx:id="instruction" prefWidth="150.0" />
+                              <ComboBox fx:id="source" prefWidth="150.0" />
+                              <ComboBox fx:id="destination" prefWidth="150.0" />
+                              <Button fx:id="getCommand" mnemonicParsing="false" text="Give command" />
+                          </children>
+                      </HBox>
+                  <HBox VBox.vgrow="ALWAYS">
+                     <children>
+                        <ListView fx:id="DListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <ListView fx:id="AListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <ListView fx:id="OtherRegsListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <ListView fx:id="MemListView" prefHeight="200.0" prefWidth="179.0" VBox.vgrow="ALWAYS" />
+                  </children>
+      
+              </VBox>
+
+   </children>
+</AnchorPane>
