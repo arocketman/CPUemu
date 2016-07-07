@@ -7,20 +7,12 @@ import java.util.ArrayList;
  */
 public class CPU {
 
-    public static void main(String[] args) {
-        CPU cpu = new CPU();
-        cpu.D.set(0,0x2);
-        cpu.instructionSet.regToReg("MOVE","D0","D1");
-        System.out.println("ciao");
-    }
-
-
     private InstructionSet instructionSet;
     private ArrayList<Integer> D;               //data registers - 32 bits
     private ArrayList<Integer> A;               //address registers - 32bits
     private short SR;                           //status register - 16bits
     private int PC;                             //Program Counter
-    private byte[] IR;                            //Instruction register
+    private byte[] IR;                          //Instruction register
 
     public CPU(){
         D = new ArrayList<>();

@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import main.core.Sim;
+import main.core.Utils;
 
 public class Controller {
 
@@ -22,8 +23,6 @@ public class Controller {
     @FXML
     private Button getCommand;
     @FXML
-    private Label SR;
-    @FXML
     private ListView<String> AListView;
     @FXML
     private ListView<String> DListView;
@@ -34,12 +33,11 @@ public class Controller {
 
     private static int STATUS_REGISTER = 0;
 
-    ObservableList<String> ARegsObservable = FXCollections.observableArrayList();
-    ObservableList<String> DRegsObservable = FXCollections.observableArrayList();
-    ObservableList<String> otherRegsObservable = FXCollections.observableArrayList();
-    ObservableList<String> MemObservable = FXCollections.observableArrayList();
-
-
+    //Observable lists for the registers and memory ListViews.
+    private ObservableList<String> ARegsObservable = FXCollections.observableArrayList();
+    private ObservableList<String> DRegsObservable = FXCollections.observableArrayList();
+    private ObservableList<String> otherRegsObservable = FXCollections.observableArrayList();
+    private ObservableList<String> MemObservable = FXCollections.observableArrayList();
 
     Sim system = new Sim();
 
@@ -48,8 +46,8 @@ public class Controller {
 
         //Registers setup
         for(int i = 0; i <= 7; i++){
-            String AregI="A" + i + "=" + getHexWithTrailingZeroes(system.getCpu().getA(i));
-            String DregI = "D" + i + "=" + getHexWithTrailingZeroes(system.getCpu().getD(i));
+            String AregI="A" + i + "=" + Utils.getHexWithTrailingZeroes(system.getCpu().getA(i));
+            String DregI = "D" + i + "=" + Utils.getHexWithTrailingZeroes(system.getCpu().getD(i));
             ARegsObservable.add(AregI);
             DRegsObservable.add(DregI);
         }
@@ -59,7 +57,7 @@ public class Controller {
         OtherRegsListView.setItems(otherRegsObservable);
         MemListView.setItems(MemObservable);
 
-        otherRegsObservable.add(STATUS_REGISTER,"SR = " + getBinWithTrailingZeroes((int) system.getCpu().getSR()));
+        otherRegsObservable.add(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
 
         //Textarea setup
         Instructions.setEditable(false);
@@ -71,8 +69,8 @@ public class Controller {
 
         //Instruction setup
         instruction.getItems().addAll("MOVE","ADD","SUB");
-        source.getItems().addAll(getRegsStrings());
-        destination.getItems().addAll(getRegsStrings());
+        source.getItems().addAll(Utils.getRegsStrings());
+        destination.getItems().addAll(Utils.getRegsStrings());
 
 
 
@@ -82,7 +80,7 @@ public class Controller {
             public void handle(ActionEvent event) {
                 //We put the instruction in memory. The instruction is put in a way that it's always 4 bytes long. So
                 //ADD -> 0ADD , MOVE -> MOVE . This little hack helps a lot during the fetch phase.
-                String instruction4 = String.format("%4s", instruction.getSelectionModel().getSelectedItem().toString()).replace(" ","0");
+                String instruction4 = Utils.getLeadingZeroesVersion(4,instruction.getSelectionModel().getSelectedItem().toString());
                 system.getMemory().putInstruction( instruction4 + source.getSelectionModel().getSelectedItem().toString() + destination.getSelectionModel().getSelectedItem().toString());
                 //One Von Neumann cycle.
                 system.VonNeumann();
@@ -92,8 +90,8 @@ public class Controller {
                     public void run() {
                         //Updating the UI.
                         int dindex = destination.getSelectionModel().getSelectedIndex();
-                        DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
-                        otherRegsObservable.set(STATUS_REGISTER,"SR = " + getBinWithTrailingZeroes((int) system.getCpu().getSR()));
+                        DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
+                        otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
                         Instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
 
                         updateMemoryUI();
@@ -103,22 +101,10 @@ public class Controller {
         });
     }
 
-    private String getHexWithTrailingZeroes(Integer value){
-        return String.format("%8s",Integer.toHexString(value)).replace(" ","0");
-    }
-
-    private String getBinWithTrailingZeroes(Integer value){
-        return String.format("%16s" , Integer.toBinaryString(value)).replace(" ","0");
-    }
-
-    private String[] getRegsStrings(){
-        return new String[]{"D0","D1","D2","D3","D4","D5","D6","D7"};
-    }
-
     private void updateMemoryUI(){
         byte [] mem = system.getMemory().getRam();
         for(int i = 0; i < mem.length; i++ )
-            MemObservable.add(i,"["+i+"]   " +   String.format("%2s",String.valueOf(mem[i])).replace(" ","0") + "    " + (char)mem[i]);
+            MemObservable.add(i,"["+i+"]   " +   Utils.getLeadingZeroesVersion(2,String.valueOf(mem[i])) + "        -->  " + (char)mem[i]);
     }
 
 }
