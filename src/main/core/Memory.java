@@ -43,4 +43,8 @@ public class Memory {
             ram[currentInstructionAddress++] = b;
     }
 
+    public void putInstruction(byte b){
+        ram[currentInstructionAddress++] = b;
+    }
+
 }

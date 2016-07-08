@@ -54,7 +54,7 @@ public class Sim {
      */
     private String decode(String decodedInstruction){
         decodedInstruction += new String(cpu.getIR());
-        if(decodedInstruction.equals("MOVE") || decodedInstruction.equals("0ADD") || decodedInstruction.equals("0SUB")){
+        if(needsAnotherFetchInstruction(decodedInstruction)){
                 //Getting the operands
                 fetch();
                 return decode(decodedInstruction);
@@ -63,7 +63,19 @@ public class Sim {
         return decodedInstruction;
     }
 
+    private boolean needsAnotherFetchInstruction(String decodedInstruction) {
+        return  decodedInstruction.equals("MOVR") ||
+                decodedInstruction.equals("ADDR") ||
+                decodedInstruction.equals("SUBR") ||
+                decodedInstruction.equals("ADDI") ||
+                decodedInstruction.equals("MOVI") ||
+                decodedInstruction.equals("SUBI");
+    }
+
     private void execute(String instruction){
-        cpu.getInstructionSet().regToReg(instruction.substring(0,4),instruction.substring(4,6),instruction.substring(6,8));
+        if(Utils.isRegisterOperation(instruction.substring(0,4)))
+            cpu.getInstructionSet().regToReg(instruction.substring(0,4),instruction.substring(4,6),instruction.substring(6,8));
+        else
+            cpu.getInstructionSet().numToReg(instruction.substring(0,4),instruction.substring(4,6),instruction.substring(6,8));
     }
 }

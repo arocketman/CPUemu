@@ -9,6 +9,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import main.core.Sim;
 import main.core.Utils;
+import main.compiler.Compiler;
+
+import java.util.Optional;
 
 public class Controller {
 
@@ -41,6 +44,7 @@ public class Controller {
     private ObservableList<String> MemObservable = FXCollections.observableArrayList();
 
     Sim system = new Sim();
+    Compiler compiler = new Compiler(system);
 
     @FXML
     protected void initialize(){
@@ -73,17 +77,16 @@ public class Controller {
         instruction.getItems().addAll("MOVE","ADD","SUB");
         source.getItems().addAll(Utils.getRegsStrings());
         destination.getItems().addAll(Utils.getRegsStrings());
-
+        source.getItems().add("Custom Operand");
+        source.setOnAction(new EventHandlerDialog());
 
 
         //Button setup
         getCommand.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //We put the instruction in memory. The instruction is put in a way that it's always 4 bytes long. So
-                //ADD -> 0ADD , MOVE -> MOVE . This little hack helps a lot during the fetch phase.
-                String instruction4 = Utils.getLeadingZeroesVersion(4,instruction.getSelectionModel().getSelectedItem().toString());
-                system.getMemory().putInstruction( instruction4 + source.getSelectionModel().getSelectedItem().toString() + destination.getSelectionModel().getSelectedItem().toString());
+
+                compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
                 //One Von Neumann cycle.
                 system.VonNeumann();
 
@@ -114,5 +117,24 @@ public class Controller {
         for(int i = 0; i < mem.length; i++ )
             MemObservable.add(i,"["+i+"]   " +   Utils.getLeadingZeroesVersion(2,String.valueOf(mem[i])) + "        -->  " + (char)mem[i]);
     }
+
+    private class EventHandlerDialog implements javafx.event.EventHandler<ActionEvent> {
+        private int oldVal;
+
+        @Override
+        public void handle(ActionEvent event) {
+            if(source.getSelectionModel().getSelectedIndex() == 8 && source.getSelectionModel().getSelectedIndex() != oldVal){
+                TextInputDialog dialog = new TextInputDialog("22");
+                dialog.setTitle("Insert immediate number");
+                dialog.setHeaderText("Insert the source operand number");
+                dialog.setContentText("Please enter the source operand number (IT WILL BE TRUNCATED TO 2 FIGURES):");
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(name -> source.getItems().set(8,name));
+            }
+
+            oldVal = source.getSelectionModel().getSelectedIndex();
+        }
+    }
+
 
 }

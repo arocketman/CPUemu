@@ -15,19 +15,57 @@ public class InstructionSet {
         Integer sourceReg = decodeRegister(source);
         Integer destReg = decodeRegister(destination);
         switch(OP){
-            case "MOVE" :
+            case "MOVR" :
                 cpu.setD(sourceReg,destReg);
                 cpu.setSR(sourceReg);
             break;
-            case "0ADD" :
+            case "ADDR" :
                 cpu.setD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
             break;
-            case "0SUB" :
+            case "SUBR" :
                 cpu.setD(sourceReg-destReg,destReg);
                 cpu.setSR(sourceReg-destReg);
             break;
+            case "CMPR":
+                cpu.setSR(sourceReg-destReg);
+            break;
         }
+    }
+
+    public void numToReg(String OP,String source,String destination){
+        Integer sourceOp = decodeOperand(source);
+        Integer destReg = decodeRegister(destination);
+        switch(OP){
+            case "MOVI" :
+                cpu.setD(sourceOp,destReg);
+                cpu.setSR(sourceOp);
+                break;
+            case "ADDI" :
+                cpu.setD(sourceOp+destReg,destReg);
+                cpu.setSR(sourceOp+destReg);
+                break;
+            case "SUBI" :
+                cpu.setD(sourceOp-destReg,destReg);
+                cpu.setSR(sourceOp-destReg);
+                break;
+            case "CMPI":
+                cpu.setSR(sourceOp-destReg);
+                break;
+        }
+    }
+
+    public void jmp(int addr){
+        cpu.setPC(addr);
+    }
+
+    /**
+     * We are saving the operand on 2 bytes but actually using just the second one (the first one is 00)
+     * @param operand
+     * @return
+     */
+    private Integer decodeOperand(String operand){
+        return (int) operand.getBytes()[1];
     }
 
     private Integer decodeRegister(String regName){
