@@ -9,7 +9,7 @@
               <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
       
-                      <TextArea fx:id="Instructions" prefHeight="199.0" prefWidth="800.0" VBox.vgrow="ALWAYS" />
+                      <TextArea fx:id="instructions" prefHeight="199.0" prefWidth="800.0" VBox.vgrow="ALWAYS" />
 
                       <HBox alignment="CENTER" prefWidth="200.0">
                           <children>
@@ -26,10 +26,10 @@
                      <children>
                         <ListView fx:id="DListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                         <ListView fx:id="AListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <ListView fx:id="OtherRegsListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <ListView fx:id="otherRegsListView" prefHeight="150.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <ListView fx:id="MemListView" prefHeight="200.0" prefWidth="179.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="memListView" prefHeight="200.0" prefWidth="179.0" VBox.vgrow="ALWAYS" />
                   </children>
       
               </VBox>

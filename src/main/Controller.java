@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import main.core.Sim;
@@ -16,7 +15,7 @@ import java.util.Optional;
 public class Controller {
 
     @FXML
-    private TextArea Instructions;
+    private TextArea instructions;
     @FXML
     private ComboBox instruction;
     @FXML
@@ -30,9 +29,9 @@ public class Controller {
     @FXML
     private ListView<String> DListView;
     @FXML
-    private ListView<String> OtherRegsListView;
+    private ListView<String> otherRegsListView;
     @FXML
-    private ListView<String> MemListView;
+    private ListView<String> memListView;
 
     private static int STATUS_REGISTER = 0;
     private static int PROGRAM_COUNTER = 1;
@@ -59,44 +58,36 @@ public class Controller {
 
         AListView.setItems(ARegsObservable);
         DListView.setItems(DRegsObservable);
-        OtherRegsListView.setItems(otherRegsObservable);
-        MemListView.setItems(MemObservable);
+        otherRegsListView.setItems(otherRegsObservable);
+        memListView.setItems(MemObservable);
 
         otherRegsObservable.add(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.add(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
 
         //Textarea setup
-        Instructions.setEditable(false);
+        instructions.setEditable(false);
 
         //Setting up Memory UI
         updateMemoryUI();
         //TODO: Not sure why scroll to doesn't scroll exactly to 4000 here. Temporary hotfix of adding 6 to it.
-        MemListView.scrollTo(system.getCpu().getPC()+6);
+        memListView.scrollTo(system.getCpu().getPC()+6);
 
         //Instruction setup
         instruction.getItems().addAll("MOVE","ADD","SUB");
-        source.getItems().addAll(Utils.getRegsStrings());
-        destination.getItems().addAll(Utils.getRegsStrings());
+        source.getItems().addAll(Utils.getDataRegsStrings());
+        destination.getItems().addAll(Utils.getDataRegsStrings());
         source.getItems().add("Custom Operand");
         source.setOnAction(new EventHandlerDialog());
 
 
         //Button setup
-        getCommand.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        getCommand.setOnAction(event -> {
 
-                compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
-                //One Von Neumann cycle.
-                system.VonNeumann();
+            compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
+            //One Von Neumann cycle.
+            system.VonNeumann();
 
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        refreshUI();
-                    }
-                });
-            }
+            Platform.runLater(Controller.this::refreshUI);
         });
     }
 
@@ -107,7 +98,7 @@ public class Controller {
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
 
-        Instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
+        instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
 
         updateMemoryUI();
     }
@@ -124,10 +115,10 @@ public class Controller {
         @Override
         public void handle(ActionEvent event) {
             if(source.getSelectionModel().getSelectedIndex() == 8 && source.getSelectionModel().getSelectedIndex() != oldVal){
-                TextInputDialog dialog = new TextInputDialog("22");
+                TextInputDialog dialog = new TextInputDialog("6");
                 dialog.setTitle("Insert immediate number");
                 dialog.setHeaderText("Insert the source operand number");
-                dialog.setContentText("Please enter the source operand number (IT WILL BE TRUNCATED TO 2 FIGURES):");
+                dialog.setContentText("Please enter the source operand number (MAX = 127. If it exceeds 127 it will be rounded to 127.):");
                 Optional<String> result = dialog.showAndWait();
                 result.ifPresent(name -> source.getItems().set(8,name));
             }
