@@ -82,23 +82,26 @@ public class Controller {
 
         //Button setup
         getCommand.setOnAction(event -> {
-
+            int oldPC = system.getCpu().getPC();
             compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
             //One Von Neumann cycle.
             system.VonNeumann();
 
-            Platform.runLater(Controller.this::refreshUI);
+            Platform.runLater(() -> refreshUI(oldPC));
         });
     }
 
-    private void refreshUI() {
+
+
+    private void refreshUI(int oldPC) {
         //Updating the UI.
         int dindex = destination.getSelectionModel().getSelectedIndex();
         DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
 
-        instructions.appendText(instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
+
+        instructions.appendText(Utils.getPCstr(oldPC) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
 
         updateMemoryUI();
     }

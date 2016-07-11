@@ -13,7 +13,7 @@ public class Compiler {
         this.system = system;
     }
 
-    public void compileInstruction(String instruction , String sourceOP , String destOP){
+    public void compileInstruction(String instruction, String sourceOP, String destOP){
         //We put the instruction in memory. The instruction is put in a way that it's always 4 bytes long. So
         //ADD -> 0ADD , MOVE -> MOVE . This little hack helps a lot during the fetch phase.
         String instruction4 = instruction.substring(0,3);
@@ -21,12 +21,12 @@ public class Compiler {
         if(Utils.isNumeric(sourceOP)){
             //Must be immediate addressing.
             instruction4 = instruction4 + "I"; //MOVE -> MOV -> MOVI
-            byte op1 = Utils.getByteOperandFromNumericString(sourceOP);
+            byte [] op1 = Utils.encodeIntegerToBytes(sourceOP);
 
             //TODO: As of right now I'm just using one byte and 'filling up' the other one. This can definitely be improved.
             system.getMemory().putInstruction(instruction4);
-            system.getMemory().putInstruction((byte) 0);
-            system.getMemory().putInstruction(op1);
+            system.getMemory().putInstruction(op1[0]);
+            system.getMemory().putInstruction(op1[1]);
             system.getMemory().putInstruction(destOP);
         }
         else{
@@ -35,6 +35,5 @@ public class Compiler {
         }
 
     }
-
 
 }

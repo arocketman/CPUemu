@@ -1,5 +1,8 @@
 package main.core;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Andreuccio on 07/07/2016.
  */
@@ -85,6 +88,32 @@ public class Utils {
      */
     public static boolean isImmediateOperation(String instruction){
         return instruction.endsWith("I");
+    }
+
+    /**
+     * Encodes a 4 digits integer value to a byte array where the first element represents the two most significant digits
+     * and the second element the two least significant digits. e.g: (1234 => memBytes[0] = 12 , memBytes[1] = 34)
+     * @param value the integer in string representation to be converted to a byte array.
+     * @return a byte array representation of the input Integer value.
+     */
+    public static byte[] encodeIntegerToBytes(String value){
+        if(value.length() > 4)
+            value = "9999";
+        // We need the input string to be 4 digits for this to work, so if the user inputs 34 , it will be 0034
+        String fourDigitsStringValue = getLeadingZeroesVersion(4,value);
+        byte [] memBytes = new byte[2];
+        memBytes[0] = getByteOperandFromNumericString(fourDigitsStringValue.substring(0,2));
+        memBytes[1] = getByteOperandFromNumericString(fourDigitsStringValue.substring(2,4));
+        return memBytes;
+    }
+
+    private static List<Integer> digits(int i) {
+        List<Integer> digits = new ArrayList<Integer>();
+        while(i > 0) {
+            digits.add(i % 10);
+            i /= 10;
+        }
+        return digits;
     }
 
     public static String getPCstr(int PC){

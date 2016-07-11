@@ -60,12 +60,15 @@ public class InstructionSet {
     }
 
     /**
-     * We are saving the operand on 2 bytes but actually using just the second one (the first one is 00)
-     * @param operand
-     * @return
+     * Given a String representation in memory of an integer value we convert it to an Integer.
+     * The method who was responsable of encoding the source operand is
+     * Utils' method {@link main.core.Utils#encodeIntegerToBytes(String)} encodeIntegerToBytes.
+     * So the number 1234 is actually saved as : memBytes[0] = 12 , memBytes[1] = 34.
+     * @param operand The string representation of the operand in two bytes of memory.
+     * @return Integer value of the input operand .
      */
     private Integer decodeOperand(String operand){
-        return (int) operand.getBytes()[1];
+        return Integer.valueOf(String.valueOf(operand.getBytes()[0]) + String.valueOf(operand.getBytes()[1]));
     }
 
     private Integer decodeRegister(String regName){
