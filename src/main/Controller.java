@@ -6,10 +6,14 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import main.core.Sim;
 import main.core.Utils;
 import main.compiler.Compiler;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Controller {
@@ -73,7 +77,7 @@ public class Controller {
         memListView.scrollTo(system.getCpu().getPC()+6);
 
         //Instruction setup
-        instruction.getItems().addAll("MOVE","ADD","SUB");
+        instruction.getItems().addAll("MOVE","ADD","SUB","JMP");
         source.getItems().addAll(Utils.getDataRegsStrings());
         destination.getItems().addAll(Utils.getDataRegsStrings());
         source.getItems().add("Custom Operand");
@@ -87,7 +91,10 @@ public class Controller {
             //One Von Neumann cycle.
             system.VonNeumann();
 
-            Platform.runLater(() -> refreshUI(oldPC));
+            Platform.runLater(() -> {
+                refreshUI(oldPC);
+                instructions.appendText(Utils.getPCstr(oldPC) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
+            });
         });
     }
 
@@ -96,12 +103,11 @@ public class Controller {
     private void refreshUI(int oldPC) {
         //Updating the UI.
         int dindex = destination.getSelectionModel().getSelectedIndex();
-        DRegsObservable.set(dindex,DRegsObservable.get(dindex).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(dindex)));
+        for(int i = 0; i < 7; i++){
+            DRegsObservable.set(i,DRegsObservable.get(i).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(i)));
+        }
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
-
-
-        instructions.appendText(Utils.getPCstr(oldPC) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
 
         updateMemoryUI();
     }
@@ -110,6 +116,34 @@ public class Controller {
         byte [] mem = system.getMemory().getRam();
         for(int i = 0; i < mem.length; i++ )
             MemObservable.add(i,"["+i+"]   " +   Utils.getLeadingZeroesVersion(2,String.valueOf(mem[i])) + "        -->  " + (char)mem[i]);
+    }
+
+    public void loadAssembly(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(instruction.getScene().getWindow());
+        if (file != null) {
+            try {
+                ArrayList<String> decodedInstructions = compiler.loadAssembly(file);
+                Platform.runLater(() -> {
+                    for(String instruction1 : decodedInstructions)
+                        instructions.appendText(instruction1 + "\n");
+
+                    updateMemoryUI();
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public void stepOver(ActionEvent actionEvent) {
+        int oldPC = system.getCpu().getPC();
+        //One Von Neumann cycle.
+        system.VonNeumann();
+
+        Platform.runLater(() -> refreshUI(oldPC));
     }
 
     private class EventHandlerDialog implements javafx.event.EventHandler<ActionEvent> {

@@ -46,11 +46,18 @@ public class InstructionSet {
                 cpu.setSR(sourceOp+destReg);
                 break;
             case "SUBI" :
-                cpu.setD(sourceOp-destReg,destReg);
-                cpu.setSR(sourceOp-destReg);
+                cpu.setD(destReg-sourceOp,destReg);
+                cpu.setSR(destReg-sourceOp);
                 break;
             case "CMPI":
                 cpu.setSR(sourceOp-destReg);
+                break;
+            case "JMPI":
+                jmp(sourceOp);
+                break;
+            case "BNEI":
+                if(!cpu.isFlagZeroHigh())
+                    jmp(sourceOp);
                 break;
         }
     }
@@ -68,7 +75,7 @@ public class InstructionSet {
      * @return Integer value of the input operand .
      */
     private Integer decodeOperand(String operand){
-        return Integer.valueOf(String.valueOf(operand.getBytes()[0]) + String.valueOf(operand.getBytes()[1]));
+        return Integer.valueOf(Utils.getLeadingZeroesVersion(2,String.valueOf(operand.getBytes()[0])) + Utils.getLeadingZeroesVersion(2,String.valueOf(operand.getBytes()[1])));
     }
 
     private Integer decodeRegister(String regName){

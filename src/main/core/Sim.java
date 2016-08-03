@@ -69,7 +69,9 @@ public class Sim {
                 decodedInstruction.equals("SUBR") ||
                 decodedInstruction.equals("ADDI") ||
                 decodedInstruction.equals("MOVI") ||
-                decodedInstruction.equals("SUBI");
+                decodedInstruction.equals("SUBI") ||
+                decodedInstruction.equals("JMPI") ||
+                decodedInstruction.equals("BNEI");
     }
 
     private void execute(String instruction){

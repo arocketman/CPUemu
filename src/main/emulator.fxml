@@ -6,8 +6,36 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
    <children>
-              <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+       <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
+             <MenuBar fx:id="menuBar">
+                 <menus>
+                     <Menu text="File">
+                         <items>
+                             <MenuItem text="Load file" onAction="#loadAssembly"/>
+                             <SeparatorMenuItem />
+                             <MenuItem text="Exit" />
+                         </items>
+                     </Menu>
+                     <Menu text="Edit">
+                         <items>
+                             <MenuItem text="Edit PC" />
+                             <MenuItem text="Edit memory writing location" />
+
+                             <MenuItem text="Step over" onAction="#stepOver" />
+                         </items>
+                     </Menu>
+                     <Menu text="Help">
+                         <items>
+                             <MenuItem disable="true" text="Search" />
+                             <MenuItem text="Online Manual" visible="false" />
+                             <SeparatorMenuItem />
+                             <MenuItem text="About" />
+                         </items>
+                     </Menu>
+                 </menus>
+             </MenuBar>
       
                       <TextArea fx:id="instructions" prefHeight="199.0" prefWidth="800.0" VBox.vgrow="ALWAYS" />
 

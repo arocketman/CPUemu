@@ -75,8 +75,10 @@ public class CPU {
             this.SR = (short) (this.SR|0x4);
         else
             this.SR = (short) (this.SR&0xFFFB);
+    }
 
-
+    public boolean isFlagZeroHigh(){
+        return (this.SR & 0x4) == 0x4;
     }
 
     public int getPC() {
