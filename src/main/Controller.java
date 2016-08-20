@@ -37,8 +37,9 @@ public class Controller {
     @FXML
     private ListView<String> instructionsListView;
 
-    private static int STATUS_REGISTER = 0;
-    private static int PROGRAM_COUNTER = 1;
+    private static final int STATUS_REGISTER = 0;
+    private static final int PROGRAM_COUNTER = 1;
+    private static final int MEM_WRITING_LOCATION = 2;
 
     //Observable lists for the registers and memory ListViews.
     private ObservableList<String> ARegsObservable = FXCollections.observableArrayList();
@@ -70,6 +71,7 @@ public class Controller {
 
         otherRegsObservable.add(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.add(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
+        otherRegsObservable.add(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
 
         //Setting up Memory UI
         updateMemoryUI();
@@ -86,29 +88,34 @@ public class Controller {
 
         //Button setup
         getCommand.setOnAction(event -> {
-            int oldPC = system.getCpu().getPC();
+            if(instruction.getSelectionModel().isEmpty() || source.getSelectionModel().isEmpty() || destination.getSelectionModel().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Please fill all the necessary comboboxes");
+                alert.setHeaderText("Instruction, source and destination must be selected before issuing the command.");
+                alert.showAndWait();
+                return;
+            }
+
             int oldMem = system.getMemory().getCurrentInstructionAddress();
             compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
             //One Von Neumann cycle.
             system.VonNeumann();
 
             Platform.runLater(() -> {
-                refreshUI(oldPC);
+                refreshUI();
                 instructionsObservable.add(Utils.getPCstr(oldMem) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
             });
         });
     }
 
-
-
-    private void refreshUI(int oldPC) {
+    private void refreshUI() {
         //Updating the UI.
-        int dindex = destination.getSelectionModel().getSelectedIndex();
         for(int i = 0; i < 7; i++){
             DRegsObservable.set(i,DRegsObservable.get(i).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(i)));
         }
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
+        otherRegsObservable.set(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
 
         updateMemoryUI();
     }
@@ -155,7 +162,6 @@ public class Controller {
     }
 
     public void stepOver(ActionEvent actionEvent) {
-        int oldPC = system.getCpu().getPC();
         //One Von Neumann cycle.
         system.VonNeumann();
 
@@ -167,7 +173,7 @@ public class Controller {
 
         int finalInstructionToFocus = instructionToFocus;
         Platform.runLater(() -> {
-            refreshUI(oldPC);
+            refreshUI();
             focusIndexListView(instructionsListView, finalInstructionToFocus);
         });
     }
