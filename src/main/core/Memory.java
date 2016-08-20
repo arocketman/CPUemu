@@ -18,6 +18,14 @@ public class Memory {
         currentInstructionAddress = INSTRUCTION_AREA;
     }
 
+    public int getCurrentInstructionAddress() {
+        return currentInstructionAddress;
+    }
+
+    public void setCurrentInstructionAddress(int currentInstructionAddress) {
+        this.currentInstructionAddress = currentInstructionAddress;
+    }
+
     public byte[] getRam() {
         return ram;
     }

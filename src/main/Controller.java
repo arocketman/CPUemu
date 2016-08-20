@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-import main.core.CPU;
 import main.core.Sim;
 import main.core.Utils;
 import main.compiler.Compiler;
@@ -19,8 +18,6 @@ import java.util.Optional;
 
 public class Controller {
 
-    @FXML
-    private TextArea instructions;
     @FXML
     private ComboBox instruction;
     @FXML
@@ -37,6 +34,8 @@ public class Controller {
     private ListView<String> otherRegsListView;
     @FXML
     private ListView<String> memListView;
+    @FXML
+    private ListView<String> instructionsListView;
 
     private static int STATUS_REGISTER = 0;
     private static int PROGRAM_COUNTER = 1;
@@ -46,6 +45,7 @@ public class Controller {
     private ObservableList<String> DRegsObservable = FXCollections.observableArrayList();
     private ObservableList<String> otherRegsObservable = FXCollections.observableArrayList();
     private ObservableList<String> MemObservable = FXCollections.observableArrayList();
+    private ObservableList<String> instructionsObservable = FXCollections.observableArrayList();
 
 
     Sim system = new Sim();
@@ -66,12 +66,10 @@ public class Controller {
         DListView.setItems(DRegsObservable);
         otherRegsListView.setItems(otherRegsObservable);
         memListView.setItems(MemObservable);
+        instructionsListView.setItems(instructionsObservable);
 
         otherRegsObservable.add(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.add(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
-
-        //Textarea setup
-        instructions.setEditable(false);
 
         //Setting up Memory UI
         updateMemoryUI();
@@ -89,13 +87,14 @@ public class Controller {
         //Button setup
         getCommand.setOnAction(event -> {
             int oldPC = system.getCpu().getPC();
+            int oldMem = system.getMemory().getCurrentInstructionAddress();
             compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
             //One Von Neumann cycle.
             system.VonNeumann();
 
             Platform.runLater(() -> {
                 refreshUI(oldPC);
-                instructions.appendText(Utils.getPCstr(oldPC) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
+                instructionsObservable.add(Utils.getPCstr(oldMem) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
             });
         });
     }
@@ -121,10 +120,14 @@ public class Controller {
 
 
         Platform.runLater(() -> {
-            memListView.getSelectionModel().select(system.getCpu().getPC());
-            memListView.getFocusModel().focus(system.getCpu().getPC());
-            memListView.scrollTo(system.getCpu().getPC());
+            focusIndexListView(memListView,system.getCpu().getPC());
         });
+    }
+
+    private void focusIndexListView(ListView<String> listView , int index){
+        listView.getSelectionModel().select(index);
+        listView.getFocusModel().focus(index);
+        listView.scrollTo(index);
     }
 
     public void loadAssembly(ActionEvent actionEvent) {
@@ -137,7 +140,8 @@ public class Controller {
                 Platform.runLater(() -> {
                     int tempPC = system.getCpu().getPC();
                     for(String instruction1 : decodedInstructions) {
-                        instructions.appendText(Utils.getPCstr(tempPC) + instruction1 + "\n");
+                        instructionsObservable.add(Utils.getPCstr(tempPC) + instruction1 + "\n");
+                        focusIndexListView(instructionsListView,0);
                         tempPC = tempPC + 8;
                     }
 
@@ -155,7 +159,17 @@ public class Controller {
         //One Von Neumann cycle.
         system.VonNeumann();
 
-        Platform.runLater(() -> refreshUI(oldPC));
+        int instructionToFocus = 0;
+        for(int i = 0; i < instructionsObservable.size(); i++){
+            if(instructionsObservable.get(i).contains("[" + system.getCpu().getPC() + "]"))
+                instructionToFocus = i;
+        }
+
+        int finalInstructionToFocus = instructionToFocus;
+        Platform.runLater(() -> {
+            refreshUI(oldPC);
+            focusIndexListView(instructionsListView, finalInstructionToFocus);
+        });
     }
 
     private class EventHandlerDialog implements javafx.event.EventHandler<ActionEvent> {
