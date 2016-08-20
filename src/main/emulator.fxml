@@ -36,7 +36,7 @@
                      </Menu>
                  </menus>
              </MenuBar>
-      
+
                       <TextArea fx:id="instructions" prefHeight="199.0" prefWidth="800.0" VBox.vgrow="ALWAYS" />
 
                       <HBox alignment="CENTER" prefWidth="200.0">

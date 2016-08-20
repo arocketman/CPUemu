@@ -70,8 +70,15 @@ public class CPU {
         return SR;
     }
 
-    public void setSR(Integer SR) {
-        if(SR.equals(0))
+    public void setSR(Integer result) {
+        //Bits 4 down to 0. XNZVC
+        //Negative = Bit 3
+        if(result < 0)
+            this.SR = (short)(this.SR|0x8);
+        else
+            this.SR = (short)(this.SR&0xFFF7);
+        //Zero = Bit 2
+        if(result.equals(0))
             this.SR = (short) (this.SR|0x4);
         else
             this.SR = (short) (this.SR&0xFFFB);

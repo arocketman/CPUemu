@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
+import main.core.CPU;
 import main.core.Sim;
 import main.core.Utils;
 import main.compiler.Compiler;
@@ -45,6 +46,7 @@ public class Controller {
     private ObservableList<String> DRegsObservable = FXCollections.observableArrayList();
     private ObservableList<String> otherRegsObservable = FXCollections.observableArrayList();
     private ObservableList<String> MemObservable = FXCollections.observableArrayList();
+
 
     Sim system = new Sim();
     Compiler compiler = new Compiler(system);
@@ -116,6 +118,13 @@ public class Controller {
         byte [] mem = system.getMemory().getRam();
         for(int i = 0; i < mem.length; i++ )
             MemObservable.add(i,"["+i+"]   " +   Utils.getLeadingZeroesVersion(2,String.valueOf(mem[i])) + "        -->  " + (char)mem[i]);
+
+
+        Platform.runLater(() -> {
+            memListView.getSelectionModel().select(system.getCpu().getPC());
+            memListView.getFocusModel().focus(system.getCpu().getPC());
+            memListView.scrollTo(system.getCpu().getPC());
+        });
     }
 
     public void loadAssembly(ActionEvent actionEvent) {
@@ -126,10 +135,13 @@ public class Controller {
             try {
                 ArrayList<String> decodedInstructions = compiler.loadAssembly(file);
                 Platform.runLater(() -> {
-                    for(String instruction1 : decodedInstructions)
-                        instructions.appendText(instruction1 + "\n");
+                    int tempPC = system.getCpu().getPC();
+                    for(String instruction1 : decodedInstructions) {
+                        instructions.appendText(Utils.getPCstr(tempPC) + instruction1 + "\n");
+                        tempPC = tempPC + 8;
+                    }
 
-                    updateMemoryUI();
+                    Platform.runLater(this::updateMemoryUI);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
