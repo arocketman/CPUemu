@@ -39,6 +39,10 @@ public class CPU {
         return D.get(index);
     }
 
+    public void setD(int regNum, Integer value){
+        D.set(regNum,value);
+    }
+
     /**
      * Sets the value of a D register given a source value and a destination register.
      * Please note that the comparision with == and not equals is wanted.
@@ -48,7 +52,7 @@ public class CPU {
      * @param sourceVal
      * @param destReg
      */
-    public void setD(Integer sourceVal, Integer destReg){
+    public void moveD(Integer sourceVal, Integer destReg){
         for(int i = 0; i <= 7; i++){
             //We want to actually compare references here.
             if(destReg == getD(i)){

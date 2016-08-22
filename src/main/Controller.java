@@ -6,7 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.util.Pair;
 import main.core.Sim;
 import main.core.Utils;
 import main.compiler.Compiler;
@@ -19,13 +21,13 @@ import java.util.Optional;
 public class Controller {
 
     @FXML
-    private ComboBox instruction;
+    private ComboBox instructionComboBox;
     @FXML
-    private ComboBox source;
+    private ComboBox sourceComboBox;
     @FXML
-    private ComboBox destination;
+    private ComboBox destinationComboBox;
     @FXML
-    private Button getCommand;
+    private Button getCommandButton;
     @FXML
     private ListView<String> AListView;
     @FXML
@@ -79,44 +81,42 @@ public class Controller {
         memListView.scrollTo(system.getCpu().getPC()+6);
 
         //Instruction setup
-        instruction.getItems().addAll("MOVE","ADD","SUB","JMP");
-        source.getItems().addAll(Utils.getDataRegsStrings());
-        destination.getItems().addAll(Utils.getDataRegsStrings());
-        source.getItems().add("Custom Operand");
-        source.setOnAction(new EventHandlerDialog());
+        instructionComboBox.getItems().addAll("MOVE","ADD","SUB","JMP");
+        sourceComboBox.getItems().addAll(Utils.getDataRegsStrings());
+        destinationComboBox.getItems().addAll(Utils.getDataRegsStrings());
+        sourceComboBox.getItems().add("Custom Operand");
+        sourceComboBox.setOnAction(new CustomOperandInsertionHandler());
 
 
         //Button setup
-        getCommand.setOnAction(event -> {
-            if(instruction.getSelectionModel().isEmpty() || source.getSelectionModel().isEmpty() || destination.getSelectionModel().isEmpty()) {
+        getCommandButton.setOnAction(event -> {
+            if(instructionComboBox.getSelectionModel().isEmpty() || sourceComboBox.getSelectionModel().isEmpty() || destinationComboBox.getSelectionModel().isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Please fill all the necessary comboboxes");
-                alert.setHeaderText("Instruction, source and destination must be selected before issuing the command.");
+                alert.setHeaderText("Instruction, sourceComboBox and destinationComboBox must be selected before issuing the command.");
                 alert.showAndWait();
                 return;
             }
 
             int oldMem = system.getMemory().getCurrentInstructionAddress();
-            compiler.compileInstruction( instruction.getSelectionModel().getSelectedItem().toString() , source.getSelectionModel().getSelectedItem().toString() , destination.getSelectionModel().getSelectedItem().toString());
+            compiler.compileInstruction( instructionComboBox.getSelectionModel().getSelectedItem().toString() , sourceComboBox.getSelectionModel().getSelectedItem().toString() , destinationComboBox.getSelectionModel().getSelectedItem().toString());
             //One Von Neumann cycle.
             system.VonNeumann();
 
             Platform.runLater(() -> {
                 refreshUI();
-                instructionsObservable.add(Utils.getPCstr(oldMem) + instruction.getSelectionModel().getSelectedItem().toString() + " " + source.getSelectionModel().getSelectedItem().toString() + "," + destination.getSelectionModel().getSelectedItem().toString() + "\n");
+                instructionsObservable.add(Utils.getPCstr(oldMem) + instructionComboBox.getSelectionModel().getSelectedItem().toString() + " " + sourceComboBox.getSelectionModel().getSelectedItem().toString() + "," + destinationComboBox.getSelectionModel().getSelectedItem().toString() + "\n");
             });
         });
     }
 
     private void refreshUI() {
-        //Updating the UI.
         for(int i = 0; i < 7; i++){
             DRegsObservable.set(i,DRegsObservable.get(i).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(i)));
         }
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
         otherRegsObservable.set(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
-
         updateMemoryUI();
     }
 
@@ -140,7 +140,7 @@ public class Controller {
     public void loadAssembly(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(instruction.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(instructionComboBox.getScene().getWindow());
         if (file != null) {
             try {
                 ArrayList<String> decodedInstructions = compiler.loadAssembly(file);
@@ -178,21 +178,45 @@ public class Controller {
         });
     }
 
-    private class EventHandlerDialog implements javafx.event.EventHandler<ActionEvent> {
+    public void editRegister(ActionEvent actionEvent) {
+        Dialog<Pair<String,String>> dialog = new Dialog<>();
+        dialog.setTitle("Edit Register dialog");
+        VBox vbox = new VBox();
+        ComboBox comboBox = new ComboBox();
+        comboBox.getItems().addAll("PC","Memory Location","D0","D1","D2","D3","D4","D5","D6","D7");
+        TextField valueTextField = new TextField();
+        ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().add(submitButton);
+        vbox.getChildren().addAll(comboBox,new Label("Value (base 10)"),valueTextField,dialog.getDialogPane().lookupButton(submitButton));
+        dialog.getDialogPane().setContent(vbox);
+        dialog.setResultConverter(param -> {
+            if(param == submitButton && comboBox.getSelectionModel().getSelectedItem() != null && !valueTextField.getText().isEmpty())
+                return new Pair<>(comboBox.getSelectionModel().getSelectedItem().toString(),valueTextField.getText());
+            return null;
+        });
+        Optional<Pair<String,String>> result = dialog.showAndWait();
+        if(result.isPresent()) {
+            system.editRegister(result.get());
+            Platform.runLater(() -> refreshUI());
+        }
+    }
+
+
+    private class CustomOperandInsertionHandler implements javafx.event.EventHandler<ActionEvent> {
         private int oldVal;
 
         @Override
         public void handle(ActionEvent event) {
-            if(source.getSelectionModel().getSelectedIndex() == 8 && source.getSelectionModel().getSelectedIndex() != oldVal){
+            if(sourceComboBox.getSelectionModel().getSelectedIndex() == 8 && sourceComboBox.getSelectionModel().getSelectedIndex() != oldVal){
                 TextInputDialog dialog = new TextInputDialog("6");
                 dialog.setTitle("Insert immediate number");
-                dialog.setHeaderText("Insert the source operand number");
-                dialog.setContentText("Please enter the source operand number (MAX = 127. If it exceeds 127 it will be rounded to 127.):");
+                dialog.setHeaderText("Insert the sourceComboBox operand number");
+                dialog.setContentText("Please enter the sourceComboBox operand number (MAX = 127. If it exceeds 127 it will be rounded to 127.):");
                 Optional<String> result = dialog.showAndWait();
-                result.ifPresent(name -> source.getItems().set(8,name));
+                result.ifPresent(name -> sourceComboBox.getItems().set(8,name));
             }
 
-            oldVal = source.getSelectionModel().getSelectedIndex();
+            oldVal = sourceComboBox.getSelectionModel().getSelectedIndex();
         }
     }
 

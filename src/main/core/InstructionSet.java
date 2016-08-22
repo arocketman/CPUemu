@@ -16,15 +16,15 @@ public class InstructionSet {
         Integer destReg = decodeRegister(destination);
         switch(OP){
             case "MOVR" :
-                cpu.setD(sourceReg,destReg);
+                cpu.moveD(sourceReg,destReg);
                 cpu.setSR(sourceReg);
             break;
             case "ADDR" :
-                cpu.setD(sourceReg+destReg,destReg);
+                cpu.moveD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
             break;
             case "SUBR" :
-                cpu.setD(sourceReg-destReg,destReg);
+                cpu.moveD(sourceReg-destReg,destReg);
                 cpu.setSR(sourceReg-destReg);
             break;
             case "CMPR":
@@ -38,15 +38,15 @@ public class InstructionSet {
         Integer destReg = decodeRegister(destination);
         switch(OP){
             case "MOVI" :
-                cpu.setD(sourceOp,destReg);
+                cpu.moveD(sourceOp,destReg);
                 cpu.setSR(sourceOp);
                 break;
             case "ADDI" :
-                cpu.setD(sourceOp+destReg,destReg);
+                cpu.moveD(sourceOp+destReg,destReg);
                 cpu.setSR(sourceOp+destReg);
                 break;
             case "SUBI" :
-                cpu.setD(destReg-sourceOp,destReg);
+                cpu.moveD(destReg-sourceOp,destReg);
                 cpu.setSR(destReg-sourceOp);
                 break;
             case "CMPI":

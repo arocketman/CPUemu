@@ -1,6 +1,8 @@
 package main.core;
 
 
+import javafx.util.Pair;
+
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -77,7 +79,48 @@ public class Sim {
     private void execute(String instruction){
         if(Utils.isRegisterOperation(instruction.substring(0,4)))
             cpu.getInstructionSet().regToReg(instruction.substring(0,4),instruction.substring(4,6),instruction.substring(6,8));
-        else
+        else if(Utils.isImmediateOperation(instruction.substring(0,4)))
             cpu.getInstructionSet().numToReg(instruction.substring(0,4),instruction.substring(4,6),instruction.substring(6,8));
+        else {
+            LOGGER.info("The fetched instruction from the IR has not been recognized.");
+            //throw InstructionNotRecognizedException;
+        }
+    }
+
+
+    public void editRegister(Pair<String, String> registerValuePair) {
+        switch(registerValuePair.getKey()){
+            case "PC":
+                cpu.setPC(Integer.parseInt(registerValuePair.getValue()));
+            break;
+            case "Memory Location":
+                memory.setCurrentInstructionAddress(Integer.parseInt(registerValuePair.getValue()));
+            break;
+            case "D0":
+                cpu.setD(0, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D1":
+                cpu.setD(1, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D2":
+                cpu.setD(2, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D3":
+                cpu.setD(3, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D4":
+                cpu.setD(4, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D5":
+                cpu.setD(5, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D6":
+                cpu.setD(6, Integer.valueOf(registerValuePair.getValue()));
+            break;
+            case "D7":
+                cpu.setD(7, Integer.valueOf(registerValuePair.getValue()));
+            break;
+
+        }
     }
 }
