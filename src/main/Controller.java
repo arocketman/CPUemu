@@ -148,10 +148,10 @@ public class Controller {
                     int tempPC = system.getCpu().getPC();
                     for(String instruction1 : decodedInstructions) {
                         instructionsObservable.add(Utils.getPCstr(tempPC) + instruction1 + "\n");
-                        focusIndexListView(instructionsListView,0);
                         tempPC = tempPC + 8;
                     }
 
+                    focusIndexListView(instructionsListView,0);
                     Platform.runLater(this::updateMemoryUI);
                 });
             } catch (IOException e) {

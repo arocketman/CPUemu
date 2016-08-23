@@ -7,7 +7,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
    <children>
 
-       <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+       <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
              <MenuBar fx:id="menuBar">
                  <menus>
@@ -46,6 +46,7 @@
                   <Label text="Dest operand" />
                               <ComboBox fx:id="destinationComboBox" prefWidth="150.0" />
                               <Button fx:id="getCommandButton" mnemonicParsing="false" text="Give command" />
+                              <Button mnemonicParsing="false" text="Step over" onAction="#stepOver" />
                           </children>
                       </HBox>
                   <HBox VBox.vgrow="ALWAYS">
