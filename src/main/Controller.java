@@ -76,7 +76,7 @@ public class Controller {
         otherRegsObservable.add(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
 
         //Setting up Memory UI
-        updateMemoryUI();
+        updateMemoryUI(0,true);
         //TODO: Not sure why scroll to doesn't scroll exactly to 4000 here. Temporary hotfix of adding 6 to it.
         memListView.scrollTo(system.getCpu().getPC()+6);
 
@@ -101,7 +101,6 @@ public class Controller {
             int oldMem = system.getMemory().getCurrentInstructionAddress();
             compiler.compileInstruction( instructionComboBox.getSelectionModel().getSelectedItem().toString() , sourceComboBox.getSelectionModel().getSelectedItem().toString() , destinationComboBox.getSelectionModel().getSelectedItem().toString());
             //One Von Neumann cycle.
-            system.VonNeumann();
 
             Platform.runLater(() -> {
                 refreshUI();
@@ -117,13 +116,24 @@ public class Controller {
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
         otherRegsObservable.set(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
-        updateMemoryUI();
+        updateMemoryUI(1,false);
     }
 
-    private void updateMemoryUI(){
+    private void updateMemoryUI(int numberOfChanges , boolean initialize){
         byte [] mem = system.getMemory().getRam();
-        for(int i = 0; i < mem.length; i++ )
-            MemObservable.add(i,"["+i+"]   " +   Utils.getLeadingZeroesVersion(2,String.valueOf(mem[i])) + "        -->  " + (char)mem[i]);
+        int startIndex = 0;
+        int finalIndex = mem.length;
+        if(!initialize){
+            startIndex = system.getMemory().getCurrentInstructionAddress()-8*numberOfChanges;
+            finalIndex = startIndex+8*numberOfChanges;
+        }
+
+        for(int i = startIndex ; i < finalIndex; i++ ) {
+            if(MemObservable.size() <= i)
+                MemObservable.add(i, "[" + i + "]   " + Utils.getLeadingZeroesVersion(2, String.valueOf(mem[i])) + "        -->  " + (char) mem[i]);
+            else
+                MemObservable.set(i, "[" + i + "]   " + Utils.getLeadingZeroesVersion(2, String.valueOf(mem[i])) + "        -->  " + (char) mem[i]);
+        }
 
 
         Platform.runLater(() -> {
@@ -144,16 +154,17 @@ public class Controller {
         if (file != null) {
             try {
                 ArrayList<String> decodedInstructions = compiler.loadAssembly(file);
-                Platform.runLater(() -> {
-                    int tempPC = system.getCpu().getPC();
-                    for(String instruction1 : decodedInstructions) {
-                        instructionsObservable.add(Utils.getPCstr(tempPC) + instruction1 + "\n");
-                        tempPC = tempPC + 8;
-                    }
+                int tempPC = system.getCpu().getPC();
+                for(String instruction1 : decodedInstructions) {
+                    instructionsObservable.add(Utils.getPCstr(tempPC) + instruction1 + "\n");
+                    tempPC = tempPC + 8;
+                }
 
+                Platform.runLater(() -> {
                     focusIndexListView(instructionsListView,instructionsListView.getItems().size()-decodedInstructions.size());
-                    Platform.runLater(this::updateMemoryUI);
+                    updateMemoryUI(decodedInstructions.size(), false);
                 });
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

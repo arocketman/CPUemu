@@ -38,18 +38,19 @@ public class Compiler {
 
     }
 
-    public static void main(String[] args) throws IOException {
-
-    }
-
     public ArrayList<String> loadAssembly(File file) throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(file));
         String line;
         ArrayList<String> instructions = new ArrayList<>();
         while ((line = fileReader.readLine()) != null) {
             instructions.add(line);
-            // WE ARE ASSUMING THE FOLLOWING SYNTAX HERE = INSTRUCTION SOURCEOP,DESTOP or INSTRUCTION OPERAND
-            parseInstruction(line);
+
+            final String l = line;
+            (new Thread(){
+                public void run(){
+                    parseInstruction(l);
+                }
+            }).start();
         }
         return instructions;
     }
