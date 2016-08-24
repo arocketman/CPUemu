@@ -151,7 +151,7 @@ public class Controller {
                         tempPC = tempPC + 8;
                     }
 
-                    focusIndexListView(instructionsListView,0);
+                    focusIndexListView(instructionsListView,instructionsListView.getItems().size()-decodedInstructions.size());
                     Platform.runLater(this::updateMemoryUI);
                 });
             } catch (IOException e) {
