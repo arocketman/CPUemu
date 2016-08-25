@@ -23,6 +23,8 @@
                              <MenuItem onAction="#editRegister" text="Edit register" />
                              <MenuItem onAction="#stepOver" text="Step over" />
                              <MenuItem onAction="#step1000" text="Step 1000" />
+                             <MenuItem onAction="#runProgram" text="Run" />
+                             <MenuItem onAction="#stopProgram" text="Stop" />
                          </items>
                      </Menu>
                      <Menu text="Help">

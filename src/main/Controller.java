@@ -53,6 +53,7 @@ public class Controller {
 
     Sim system = new Sim();
     Compiler compiler = new Compiler(system);
+    private boolean runProgram = false;
 
     @FXML
     protected void initialize(){
@@ -235,6 +236,16 @@ public class Controller {
             stepOver(null);
     }
 
+    public void runProgram(ActionEvent actionEvent){
+        Thread runnerThread = new Thread(new ProgramRunner());
+        runnerThread.setDaemon(true);
+        runProgram=true;
+        runnerThread.start();
+    }
+
+    public void stopProgram(ActionEvent actionEvent){
+        runProgram = false;
+    }
 
     private class CustomOperandInsertionHandler implements javafx.event.EventHandler<ActionEvent> {
         private int oldVal;
@@ -251,6 +262,21 @@ public class Controller {
             }
 
             oldVal = sourceComboBox.getSelectionModel().getSelectedIndex();
+        }
+    }
+
+    private class ProgramRunner implements Runnable{
+
+        @Override
+        public void run() {
+            while(runProgram){
+                stepOver(null);
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
