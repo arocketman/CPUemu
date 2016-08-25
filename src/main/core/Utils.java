@@ -1,10 +1,9 @@
 package main.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by Andreuccio on 07/07/2016.
+ * Utils class contains utility static methods used by other classes.
+ * @author Andrea Capuano
+ * @version 0.1
  */
 public class Utils {
 
@@ -45,7 +44,7 @@ public class Utils {
     }
 
     /**
-     * Checks wheter or not the input string is a valid integer number or not.
+     * Checks whether or not the input string is a valid integer number or not.
      * @param str the string to check against.
      * @return true if the string is an integer number, false otherwise.
      */
@@ -107,15 +106,11 @@ public class Utils {
         return memBytes;
     }
 
-    private static List<Integer> digits(int i) {
-        List<Integer> digits = new ArrayList<Integer>();
-        while(i > 0) {
-            digits.add(i % 10);
-            i /= 10;
-        }
-        return digits;
-    }
-
+    /**
+     * Formats the program counter in a pretty way, [PC].
+     * @param PC
+     * @return
+     */
     public static String getPCstr(int PC){
         return "[" + PC + "]";
     }

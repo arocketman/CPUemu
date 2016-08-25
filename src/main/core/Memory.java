@@ -1,7 +1,9 @@
 package main.core;
 
 /**
- * Created by Andreuccio on 06/07/2016.
+ * The emulated Memory. Its size is specified by the MEM_SIZE variable.
+ * @author Andrea Capuano
+ * @version 1.0
  */
 public class Memory {
     private byte[] ram;

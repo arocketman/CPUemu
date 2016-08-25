@@ -3,7 +3,9 @@ package main.core;
 import java.util.ArrayList;
 
 /**
- * Created by Andreuccio on 06/07/2016.
+ * The emulated CPU class. Contains registers and methods to manipulate them.
+ * @author Andrea Capuano
+ * @version 0.1
  */
 public class CPU {
 
@@ -32,8 +34,6 @@ public class CPU {
     public InstructionSet getInstructionSet() {
         return instructionSet;
     }
-
-    /* Registers getters and setters */
 
     public Integer getD(int index){
         return D.get(index);
@@ -66,6 +66,7 @@ public class CPU {
         return A.get(index);
     }
 
+    //At the point of version 0.1 it's not possible to manipulate Address registers.
     public void setA(int index, int value){
         A.set(index,value);
     }

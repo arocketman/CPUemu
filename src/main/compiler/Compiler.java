@@ -7,7 +7,9 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * Created by Andreuccio on 08/07/2016.
+ * A simple Compiler that takes instructions as text and transforms them accordingly to the CPU syntax.
+ * @author Andrea Capuano
+ * @version 0.1
  */
 public class Compiler {
     Sim system;
@@ -16,45 +18,28 @@ public class Compiler {
         this.system = system;
     }
 
-    public void compileInstruction(String instruction, String sourceOP, String destOP) {
-        //We put the instruction in memory. The instruction is put in a way that it's always 4 bytes long. So
-        //ADD -> 0ADD , MOVE -> MOVE . This little hack helps a lot during the fetch phase.
-        String instruction4 = instruction.substring(0, 3);
-
-        if (Utils.isNumeric(sourceOP)) {
-            //Must be immediate addressing.
-            instruction4 = instruction4 + "I"; //MOVE -> MOV -> MOVI
-            byte[] op1 = Utils.encodeIntegerToBytes(sourceOP);
-
-            //TODO: As of right now I'm just using one byte and 'filling up' the other one. This can definitely be improved.
-            system.getMemory().putInstruction(instruction4);
-            system.getMemory().putInstruction(op1[0]);
-            system.getMemory().putInstruction(op1[1]);
-            system.getMemory().putInstruction(destOP);
-        } else {
-            instruction4 = instruction4 + "R"; //MOVE -> MOV -> MOVR
-            system.getMemory().putInstruction(instruction4 + sourceOP + destOP);
-        }
-
-    }
-
+    /**
+     * Given a file containing assembly code, calls the parseInstruction for each line.
+     * @param file the file containing assembly code.
+     * @return an ArrayList containing the parsed instructions.
+     * @throws IOException
+     */
     public ArrayList<String> loadAssembly(File file) throws IOException {
         BufferedReader fileReader = new BufferedReader(new FileReader(file));
         String line;
         ArrayList<String> instructions = new ArrayList<>();
         while ((line = fileReader.readLine()) != null) {
             instructions.add(line);
-
-            final String l = line;
-            (new Thread(){
-                public void run(){
-                    parseInstruction(l);
-                }
-            }).start();
+            parseInstruction(line);
         }
+
         return instructions;
     }
 
+    /**
+     * Parses an instruction in String form as the instruction itself, the source operand and a destination operand.
+     * @param line the full textual instruction e.g: "MOVE D0,D1"
+     */
     private void parseInstruction(String line) {
         String instruction,sourceOP,destOP;
         if(line.contains(",")) { //Instructions such as MOVE D0,D1
@@ -70,4 +55,35 @@ public class Compiler {
         }
         compileInstruction(instruction,sourceOP,destOP);
     }
+
+    /**
+     * Given an instruction and the source,destination operands this puts in the system memory such data accordingly to the CPU syntax.
+     * At the stage of version 0.1, the destination operand must be a data register.
+     * The source operand can be both a data register or an immediate value.
+     * Such method transforms the instructions as follows:
+     * Register operations MOVE -> MOVR
+     * Immediate operations: MOVE-> MOVI
+     * @param instruction the instruction to be compiled.
+     * @param sourceOP source operand.
+     * @param destOP destination operand.
+     */
+    public void compileInstruction(String instruction, String sourceOP, String destOP) {
+        String instruction4 = instruction.substring(0, 3);
+
+        if (Utils.isNumeric(sourceOP)) {
+            instruction4 = instruction4 + "I"; //MOVE -> MOV -> MOVI
+            byte[] op1 = Utils.encodeIntegerToBytes(sourceOP);
+
+            //TODO: As of version 0.1 I'm just using one byte and 'filling up' the other one. This can definitely be improved.
+            system.getMemory().putInstruction(instruction4);
+            system.getMemory().putInstruction(op1[0]);
+            system.getMemory().putInstruction(op1[1]);
+            system.getMemory().putInstruction(destOP);
+        } else {
+            instruction4 = instruction4 + "R"; //MOVE -> MOV -> MOVR
+            system.getMemory().putInstruction(instruction4 + sourceOP + destOP);
+        }
+
+    }
+
 }

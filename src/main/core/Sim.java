@@ -7,9 +7,13 @@ import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
- * Created by Andreuccio on 06/07/2016.
+ * This class encapsulates the emulated system. It is responsible of looping through the Von Neumann's cycle.
+ *
+ * @author Andrea Capuano
+ * @version 0.1
  */
 public class Sim {
+
     private CPU cpu;
     private Memory memory;
     public static final Logger LOGGER = Logger.getLogger("SIMULATOR_LOGGER");
@@ -57,7 +61,6 @@ public class Sim {
     private String decode(String decodedInstruction){
         decodedInstruction += new String(cpu.getIR());
         if(needsAnotherFetchInstruction(decodedInstruction)){
-                //Getting the operands
                 fetch();
                 return decode(decodedInstruction);
         }
@@ -76,6 +79,10 @@ public class Sim {
                 decodedInstruction.equals("BNEI");
     }
 
+    /**
+     * Executes through the Cpu the given instruction.
+     * @param instruction
+     */
     private void execute(String instruction){
         if(Utils.isRegisterOperation(instruction.substring(0,4)))
             cpu.getInstructionSet().regToReg(instruction.substring(0,4),instruction.substring(4,6),instruction.substring(6,8));
@@ -87,7 +94,10 @@ public class Sim {
         }
     }
 
-
+    /**
+     * Edits a CPU or special register given the name of the register to edit and the value.
+     * @param registerValuePair contains the name of the register to edit and the value to edit it to.
+     */
     public void editRegister(Pair<String, String> registerValuePair) {
         switch(registerValuePair.getKey()){
             case "PC":

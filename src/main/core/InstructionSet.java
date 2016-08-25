@@ -1,7 +1,9 @@
 package main.core;
 
 /**
- * Created by Andreuccio on 06/07/2016.
+ * This class handles the execution of a given instruction.
+ * @author Andrea Capuano
+ * @version 0.1
  */
 public class InstructionSet {
 
