@@ -29,8 +29,10 @@ public class Compiler {
         String line;
         ArrayList<String> instructions = new ArrayList<>();
         while ((line = fileReader.readLine()) != null) {
-            instructions.add(line);
-            parseInstruction(line);
+            if(!line.startsWith("#")) {
+                instructions.add(line);
+                parseInstruction(line);
+            }
         }
 
         return instructions;
