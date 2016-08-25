@@ -7,6 +7,8 @@ package main.core;
  */
 public class Utils {
 
+    public final static String COMMENT_CHARACTER = "#";
+
     /**
      * Returns all the data registers in array of Strings form.
      * @return

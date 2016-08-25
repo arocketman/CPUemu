@@ -29,6 +29,10 @@ public class InstructionSet {
                 cpu.moveD(sourceReg*destReg,destReg);
                 cpu.setSR(sourceReg*destReg);
                 break;
+            case "MODR":
+                cpu.moveD(sourceReg%destReg,destReg);
+                cpu.setSR(sourceReg % destReg);
+                break;
             case "SUBR" :
                 cpu.moveD(sourceReg-destReg,destReg);
                 cpu.setSR(sourceReg-destReg);
@@ -58,6 +62,10 @@ public class InstructionSet {
             case "MULI":
                 cpu.moveD(sourceOp*destReg,destReg);
                 cpu.setSR(sourceOp*destReg);
+                break;
+            case "MODI":
+                cpu.moveD(destReg%sourceOp,destReg);
+                cpu.setSR(destReg%sourceOp);
                 break;
             case "CMPI":
                 cpu.setSR(sourceOp-destReg);

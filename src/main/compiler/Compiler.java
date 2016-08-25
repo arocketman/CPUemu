@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @version 0.1
  */
 public class Compiler {
+
     Sim system;
 
     public Compiler(Sim system) {
@@ -29,7 +30,7 @@ public class Compiler {
         String line;
         ArrayList<String> instructions = new ArrayList<>();
         while ((line = fileReader.readLine()) != null) {
-            if(!line.startsWith("#")) {
+            if(!isComment(line)) {
                 instructions.add(line);
                 parseInstruction(line);
             }
@@ -86,6 +87,11 @@ public class Compiler {
             system.getMemory().putInstruction(instruction4 + sourceOP + destOP);
         }
 
+    }
+
+
+    private boolean isComment(String line) {
+        return line.startsWith(Utils.COMMENT_CHARACTER);
     }
 
 }

@@ -186,7 +186,7 @@ public class Controller {
     }
 
     private void instructionUiSetup() {
-        instructionComboBox.getItems().addAll("MOVE","ADD","MULT","SUB","JMP");
+        instructionComboBox.getItems().addAll("MOVE","ADD","MULT","MOD","BEQ","BNE","SUB","JMP");
         sourceComboBox.getItems().addAll(Utils.getDataRegsStrings());
         sourceComboBox.getItems().add("Custom Operand");
         destinationComboBox.getItems().addAll(Utils.getDataRegsStrings());
@@ -228,6 +228,11 @@ public class Controller {
         otherRegsObservable.add(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.add(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
         otherRegsObservable.add(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
+    }
+
+    public void step1000(ActionEvent actionEvent) {
+        for(int i = 0; i < 1000; i++)
+            stepOver(null);
     }
 
 

@@ -22,6 +22,7 @@
                          <items>
                              <MenuItem onAction="#editRegister" text="Edit register" />
                              <MenuItem onAction="#stepOver" text="Step over" />
+                             <MenuItem onAction="#step1000" text="Step 1000" />
                          </items>
                      </Menu>
                      <Menu text="Help">

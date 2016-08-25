@@ -73,13 +73,16 @@ public class Sim {
                 decodedInstruction.equals("ADDR") ||
                 decodedInstruction.equals("SUBR") ||
                 decodedInstruction.equals("ADDI") ||
+                decodedInstruction.equals("MODR") ||
+                decodedInstruction.equals("MODI") ||
                 decodedInstruction.equals("MOVI") ||
                 decodedInstruction.equals("SUBI") ||
                 decodedInstruction.equals("JMPI") ||
                 decodedInstruction.equals("BEQI") ||
                 decodedInstruction.equals("BNEI") ||
                 decodedInstruction.equals("MULR") ||
-                decodedInstruction.equals("MULI");
+                decodedInstruction.equals("MULI") ||
+                decodedInstruction.equals("CMPI");
     }
 
     /**
