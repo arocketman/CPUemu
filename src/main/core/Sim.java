@@ -76,7 +76,10 @@ public class Sim {
                 decodedInstruction.equals("MOVI") ||
                 decodedInstruction.equals("SUBI") ||
                 decodedInstruction.equals("JMPI") ||
-                decodedInstruction.equals("BNEI");
+                decodedInstruction.equals("BEQI") ||
+                decodedInstruction.equals("BNEI") ||
+                decodedInstruction.equals("MULR") ||
+                decodedInstruction.equals("MULI");
     }
 
     /**

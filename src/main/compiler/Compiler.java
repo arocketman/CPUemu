@@ -61,8 +61,8 @@ public class Compiler {
      * At the stage of version 0.1, the destination operand must be a data register.
      * The source operand can be both a data register or an immediate value.
      * Such method transforms the instructions as follows:
-     * Register operations MOVE -> MOVR
-     * Immediate operations: MOVE-> MOVI
+     * Register operations ADD -> ADDR
+     * Immediate operations: ADD-> ADDI
      * @param instruction the instruction to be compiled.
      * @param sourceOP source operand.
      * @param destOP destination operand.

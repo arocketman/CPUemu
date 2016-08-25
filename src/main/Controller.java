@@ -186,7 +186,7 @@ public class Controller {
     }
 
     private void instructionUiSetup() {
-        instructionComboBox.getItems().addAll("MOVE","ADD","SUB","JMP");
+        instructionComboBox.getItems().addAll("MOVE","ADD","MULT","SUB","JMP");
         sourceComboBox.getItems().addAll(Utils.getDataRegsStrings());
         sourceComboBox.getItems().add("Custom Operand");
         destinationComboBox.getItems().addAll(Utils.getDataRegsStrings());

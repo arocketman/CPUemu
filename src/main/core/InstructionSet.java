@@ -20,18 +20,22 @@ public class InstructionSet {
             case "MOVR" :
                 cpu.moveD(sourceReg,destReg);
                 cpu.setSR(sourceReg);
-            break;
+                break;
             case "ADDR" :
                 cpu.moveD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
-            break;
+                break;
+            case "MULR":
+                cpu.moveD(sourceReg*destReg,destReg);
+                cpu.setSR(sourceReg*destReg);
+                break;
             case "SUBR" :
                 cpu.moveD(sourceReg-destReg,destReg);
                 cpu.setSR(sourceReg-destReg);
-            break;
+                break;
             case "CMPR":
                 cpu.setSR(sourceReg-destReg);
-            break;
+                break;
         }
     }
 
@@ -50,6 +54,10 @@ public class InstructionSet {
             case "SUBI" :
                 cpu.moveD(destReg-sourceOp,destReg);
                 cpu.setSR(destReg-sourceOp);
+            break;
+            case "MULI":
+                cpu.moveD(sourceOp*destReg,destReg);
+                cpu.setSR(sourceOp*destReg);
                 break;
             case "CMPI":
                 cpu.setSR(sourceOp-destReg);
@@ -59,6 +67,10 @@ public class InstructionSet {
                 break;
             case "BNEI":
                 if(!cpu.isFlagZeroHigh())
+                    jmp(sourceOp);
+                break;
+            case "BEQI":
+                if(cpu.isFlagZeroHigh())
                     jmp(sourceOp);
                 break;
         }
