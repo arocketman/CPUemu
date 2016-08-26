@@ -7,14 +7,12 @@ package main.core;
  */
 public class Utils {
 
-    public final static String COMMENT_CHARACTER = "#";
-
     /**
      * Returns all the data registers in array of Strings form.
      * @return
      */
     public static String[] getDataRegsStrings(){
-        return new String[]{"D0","D1","D2","D3","D4","D5","D6","D7"};
+        return new String[]{Constants.REGISTER_D0,Constants.REGISTER_D1,Constants.REGISTER_D2,Constants.REGISTER_D3,Constants.REGISTER_D4,Constants.REGISTER_D5,Constants.REGISTER_D6,Constants.REGISTER_D7};
     }
 
     /**

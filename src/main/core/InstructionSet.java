@@ -1,7 +1,5 @@
 package main.core;
 
-import java.util.HashMap;
-
 /**
  * This class handles the execution of a given instruction.
  * @author Andrea Capuano
@@ -10,22 +8,6 @@ import java.util.HashMap;
 public class InstructionSet {
 
     private CPU cpu;
-    HashMap<String,String> g;
-    public final static String ISA_MOVEREGISTER = "MOVR";
-    public final static String ISA_MOVEIMMEDIATE = "MOVI";
-    public final static String ISA_ADDREGISTER = "ADDR";
-    public final static String ISA_ADDIMMEDIATE = "ADDI";
-    public final static String ISA_MULTIPLYREGISTER = "MULR";
-    public final static String ISA_MULTIPLYIMMEDIATE = "MULI";
-    public final static String ISA_MODREGISTER = "MODR";
-    public final static String ISA_MODIMMEDIATE = "MODI";
-    public final static String ISA_SUBTRACTREGISTER = "SUBR";
-    public final static String ISA_SUBTRACTIMMEDIATE = "SUBI";
-    public final static String ISA_COMPAREREGISTER = "CMPR";
-    public final static String ISA_COMPAREIMMEDIATE = "CMPI";
-    public final static String ISA_JUMP = "JMPI";
-    public final static String ISA_BRANCHEQUAL = "BEQI";
-    public final static String ISA_BRANCHNOTEQUAL = "BNEI";
 
     public InstructionSet(CPU cpu){
         this.cpu = cpu;
@@ -35,27 +17,27 @@ public class InstructionSet {
         Integer sourceReg = decodeRegister(source);
         Integer destReg = decodeRegister(destination);
         switch(OP){
-            case ISA_MOVEREGISTER :
+            case Constants.ISA_MOVEREGISTER :
                 cpu.moveD(sourceReg,destReg);
                 cpu.setSR(sourceReg);
                 break;
-            case ISA_ADDREGISTER :
+            case Constants.ISA_ADDREGISTER :
                 cpu.moveD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
                 break;
-            case ISA_MULTIPLYREGISTER:
+            case Constants.ISA_MULTIPLYREGISTER:
                 cpu.moveD(sourceReg*destReg,destReg);
                 cpu.setSR(sourceReg*destReg);
                 break;
-            case ISA_MODREGISTER:
+            case Constants.ISA_MODREGISTER:
                 cpu.moveD(sourceReg%destReg,destReg);
                 cpu.setSR(sourceReg % destReg);
                 break;
-            case ISA_SUBTRACTREGISTER :
+            case Constants.ISA_SUBTRACTREGISTER :
                 cpu.moveD(sourceReg-destReg,destReg);
                 cpu.setSR(sourceReg-destReg);
                 break;
-            case ISA_COMPAREREGISTER:
+            case Constants.ISA_COMPAREREGISTER:
                 cpu.setSR(sourceReg-destReg);
                 break;
         }
@@ -65,37 +47,37 @@ public class InstructionSet {
         Integer sourceOp = decodeOperand(source);
         Integer destReg = decodeRegister(destination);
         switch(OP){
-            case ISA_MOVEIMMEDIATE :
+            case Constants.ISA_MOVEIMMEDIATE :
                 cpu.moveD(sourceOp,destReg);
                 cpu.setSR(sourceOp);
                 break;
-            case ISA_ADDIMMEDIATE :
+            case Constants.ISA_ADDIMMEDIATE :
                 cpu.moveD(sourceOp+destReg,destReg);
                 cpu.setSR(sourceOp+destReg);
                 break;
-            case ISA_SUBTRACTIMMEDIATE :
+            case Constants.ISA_SUBTRACTIMMEDIATE :
                 cpu.moveD(destReg-sourceOp,destReg);
                 cpu.setSR(destReg-sourceOp);
             break;
-            case ISA_MULTIPLYIMMEDIATE:
+            case Constants.ISA_MULTIPLYIMMEDIATE:
                 cpu.moveD(sourceOp*destReg,destReg);
                 cpu.setSR(sourceOp*destReg);
                 break;
-            case ISA_MODIMMEDIATE:
+            case Constants.ISA_MODIMMEDIATE:
                 cpu.moveD(destReg%sourceOp,destReg);
                 cpu.setSR(destReg%sourceOp);
                 break;
-            case ISA_COMPAREIMMEDIATE:
+            case Constants.ISA_COMPAREIMMEDIATE:
                 cpu.setSR(sourceOp-destReg);
                 break;
-            case ISA_JUMP:
+            case Constants.ISA_JUMP:
                 jmp(sourceOp);
                 break;
-            case ISA_BRANCHNOTEQUAL:
+            case Constants.ISA_BRANCHNOTEQUAL:
                 if(!cpu.isFlagZeroHigh())
                     jmp(sourceOp);
                 break;
-            case ISA_BRANCHEQUAL:
+            case Constants.ISA_BRANCHEQUAL:
                 if(cpu.isFlagZeroHigh())
                     jmp(sourceOp);
                 break;
@@ -121,22 +103,22 @@ public class InstructionSet {
     private Integer decodeRegister(String regName){
 
         switch(regName){
-            case "A0": return cpu.getA(0);
-            case "A1": return cpu.getA(1);
-            case "A2": return cpu.getA(2);
-            case "A3": return cpu.getA(3);
-            case "A4": return cpu.getA(4);
-            case "A5": return cpu.getA(5);
-            case "A6": return cpu.getA(6);
-            case "A7": return cpu.getA(7);
-            case "D0": return cpu.getD(0);
-            case "D1": return cpu.getD(1);
-            case "D2": return cpu.getD(2);
-            case "D3": return cpu.getD(3);
-            case "D4": return cpu.getD(4);
-            case "D5": return cpu.getD(5);
-            case "D6": return cpu.getD(6);
-            case "D7": return cpu.getD(7);
+            case Constants.REGISTER_A0: return cpu.getA(0);
+            case Constants.REGISTER_A1: return cpu.getA(1);
+            case Constants.REGISTER_A2: return cpu.getA(2);
+            case Constants.REGISTER_A3: return cpu.getA(3);
+            case Constants.REGISTER_A4: return cpu.getA(4);
+            case Constants.REGISTER_A5: return cpu.getA(5);
+            case Constants.REGISTER_A6: return cpu.getA(6);
+            case Constants.REGISTER_A7: return cpu.getA(7);
+            case Constants.REGISTER_D0: return cpu.getD(0);
+            case Constants.REGISTER_D1: return cpu.getD(1);
+            case Constants.REGISTER_D2: return cpu.getD(2);
+            case Constants.REGISTER_D3: return cpu.getD(3);
+            case Constants.REGISTER_D4: return cpu.getD(4);
+            case Constants.REGISTER_D5: return cpu.getD(5);
+            case Constants.REGISTER_D6: return cpu.getD(6);
+            case Constants.REGISTER_D7: return cpu.getD(7);
             default:
                 return null;
         }

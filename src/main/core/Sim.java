@@ -69,20 +69,20 @@ public class Sim {
     }
 
     private boolean needsAnotherFetchInstruction(String decodedInstruction) {
-        return  decodedInstruction.equals(InstructionSet.ISA_MOVEREGISTER) ||
-                decodedInstruction.equals(InstructionSet.ISA_MOVEIMMEDIATE) ||
-                decodedInstruction.equals(InstructionSet.ISA_ADDREGISTER) ||
-                decodedInstruction.equals(InstructionSet.ISA_SUBTRACTREGISTER) ||
-                decodedInstruction.equals(InstructionSet.ISA_ADDIMMEDIATE) ||
-                decodedInstruction.equals(InstructionSet.ISA_MODREGISTER) ||
-                decodedInstruction.equals(InstructionSet.ISA_MODIMMEDIATE) ||
-                decodedInstruction.equals(InstructionSet.ISA_MULTIPLYREGISTER) ||
-                decodedInstruction.equals(InstructionSet.ISA_MULTIPLYIMMEDIATE) ||
-                decodedInstruction.equals(InstructionSet.ISA_SUBTRACTIMMEDIATE) ||
-                decodedInstruction.equals(InstructionSet.ISA_JUMP) ||
-                decodedInstruction.equals(InstructionSet.ISA_BRANCHEQUAL) ||
-                decodedInstruction.equals(InstructionSet.ISA_BRANCHNOTEQUAL) ||
-                decodedInstruction.equals(InstructionSet.ISA_COMPAREIMMEDIATE);
+        return  decodedInstruction.equals(Constants.ISA_MOVEREGISTER) ||
+                decodedInstruction.equals(Constants.ISA_MOVEIMMEDIATE) ||
+                decodedInstruction.equals(Constants.ISA_ADDREGISTER) ||
+                decodedInstruction.equals(Constants.ISA_SUBTRACTREGISTER) ||
+                decodedInstruction.equals(Constants.ISA_ADDIMMEDIATE) ||
+                decodedInstruction.equals(Constants.ISA_MODREGISTER) ||
+                decodedInstruction.equals(Constants.ISA_MODIMMEDIATE) ||
+                decodedInstruction.equals(Constants.ISA_MULTIPLYREGISTER) ||
+                decodedInstruction.equals(Constants.ISA_MULTIPLYIMMEDIATE) ||
+                decodedInstruction.equals(Constants.ISA_SUBTRACTIMMEDIATE) ||
+                decodedInstruction.equals(Constants.ISA_JUMP) ||
+                decodedInstruction.equals(Constants.ISA_BRANCHEQUAL) ||
+                decodedInstruction.equals(Constants.ISA_BRANCHNOTEQUAL) ||
+                decodedInstruction.equals(Constants.ISA_COMPAREIMMEDIATE);
     }
 
     /**
@@ -106,36 +106,36 @@ public class Sim {
      */
     public void editRegister(Pair<String, String> registerValuePair) {
         switch(registerValuePair.getKey()){
-            case "PC":
+            case Constants.PROGRAM_COUNTER:
                 cpu.setPC(Integer.parseInt(registerValuePair.getValue()));
             break;
-            case "Memory Location":
+            case Constants.MEMORY_LOCATION_REGISTER:
                 memory.setCurrentInstructionAddress(Integer.parseInt(registerValuePair.getValue()));
             break;
-            case "D0":
+            case Constants.REGISTER_D0:
                 cpu.setD(0, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D1":
+                break;
+            case Constants.REGISTER_D1:
                 cpu.setD(1, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D2":
+                break;
+            case Constants.REGISTER_D2:
                 cpu.setD(2, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D3":
+                break;
+            case Constants.REGISTER_D3:
                 cpu.setD(3, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D4":
+                break;
+            case Constants.REGISTER_D4:
                 cpu.setD(4, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D5":
+                break;
+            case Constants.REGISTER_D5:
                 cpu.setD(5, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D6":
+                break;
+            case Constants.REGISTER_D6:
                 cpu.setD(6, Integer.valueOf(registerValuePair.getValue()));
-            break;
-            case "D7":
+                break;
+            case Constants.REGISTER_D7:
                 cpu.setD(7, Integer.valueOf(registerValuePair.getValue()));
-            break;
+                break;
 
         }
     }

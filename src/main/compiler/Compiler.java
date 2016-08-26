@@ -1,5 +1,6 @@
 package main.compiler;
 
+import main.core.Constants;
 import main.core.Sim;
 import main.core.Utils;
 
@@ -54,7 +55,7 @@ public class Compiler {
             instruction = line.substring(0, line.indexOf(" "));
             sourceOP = line.substring(line.indexOf(" ") + 1);
             // In these kind of instructions we really don't care about the destination operand.
-            destOP = "D0";
+            destOP = Constants.REGISTER_D0;
         }
         compileInstruction(instruction,sourceOP,destOP);
     }
@@ -91,7 +92,7 @@ public class Compiler {
 
 
     private boolean isComment(String line) {
-        return line.startsWith(Utils.COMMENT_CHARACTER);
+        return line.startsWith(Constants.COMMENT_CHARACTER);
     }
 
 }

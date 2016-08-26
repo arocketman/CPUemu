@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Pair;
+import main.core.Constants;
 import main.core.Sim;
 import main.core.Utils;
 import main.compiler.Compiler;
@@ -166,7 +167,7 @@ public class Controller {
         dialog.setTitle("Edit Register dialog");
         VBox vbox = new VBox();
         ComboBox comboBox = new ComboBox();
-        comboBox.getItems().addAll("PC","Memory Location","D0","D1","D2","D3","D4","D5","D6","D7");
+        comboBox.getItems().addAll(Constants.PROGRAM_COUNTER,Constants.MEMORY_LOCATION_REGISTER,Constants.REGISTER_D0,Constants.REGISTER_D1,Constants.REGISTER_D2,Constants.REGISTER_D3,Constants.REGISTER_D4,Constants.REGISTER_D5,Constants.REGISTER_D6,Constants.REGISTER_D7);
         TextField valueTextField = new TextField();
         ButtonType submitButton = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().add(submitButton);
@@ -187,7 +188,8 @@ public class Controller {
     }
 
     private void instructionUiSetup() {
-        instructionComboBox.getItems().addAll("MOVE","ADD","MULT","MOD","BEQ","BNE","SUB","JMP");
+
+        instructionComboBox.getItems().addAll(Constants.MOVE_INSTRUCTION,Constants.ADD_INSTRUCTION,Constants.MULTIPLY_INSTRUCTION,Constants.MOD_INSTRUCTION,Constants.BRANCHEQUAL_INSTRUCTION,Constants.BRANCHNOTEQUAL_INSTRUCTION,Constants.SUBTRACT_INSTRUCTION,Constants.JUMP_INSTRUCTION,Constants.COMPARE_INSTRUCTION);
         sourceComboBox.getItems().addAll(Utils.getDataRegsStrings());
         sourceComboBox.getItems().add("Custom Operand");
         destinationComboBox.getItems().addAll(Utils.getDataRegsStrings());
