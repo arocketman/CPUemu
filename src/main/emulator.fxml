@@ -14,25 +14,19 @@
                      <Menu text="File">
                          <items>
                              <MenuItem onAction="#loadAssembly" text="Load file" />
-                             <SeparatorMenuItem />
-                             <MenuItem text="Exit" />
                          </items>
                      </Menu>
                      <Menu text="Edit">
                          <items>
                              <MenuItem onAction="#editRegister" text="Edit register" />
+                         </items>
+                     </Menu>
+                     <Menu text="Execute">
+                         <items>
                              <MenuItem onAction="#stepOver" text="Step over" />
                              <MenuItem onAction="#step1000" text="Step 1000" />
                              <MenuItem onAction="#runProgram" text="Run" />
                              <MenuItem onAction="#stopProgram" text="Stop" />
-                         </items>
-                     </Menu>
-                     <Menu text="Help">
-                         <items>
-                             <MenuItem disable="true" text="Search" />
-                             <MenuItem text="Online Manual" visible="false" />
-                             <SeparatorMenuItem />
-                             <MenuItem text="About" />
                          </items>
                      </Menu>
                  </menus>
