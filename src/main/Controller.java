@@ -70,6 +70,7 @@ public class Controller {
     private void refreshUI() {
         for(int i = 0; i < 7; i++){
             DRegsObservable.set(i,DRegsObservable.get(i).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getD(i)));
+            ARegsObservable.set(i,ARegsObservable.get(i).substring(0,3) + Utils.getHexWithTrailingZeroes(system.getCpu().getA(i)));
         }
         otherRegsObservable.set(STATUS_REGISTER,"SR = " + Utils.getBinWithTrailingZeroes((int) system.getCpu().getSR()));
         otherRegsObservable.set(PROGRAM_COUNTER,"PC = " + system.getCpu().getPC());
@@ -247,6 +248,20 @@ public class Controller {
 
     public void stopProgram(ActionEvent actionEvent){
         runProgram = false;
+    }
+
+    @FXML
+    protected void handleReset(ActionEvent e){
+        if(((MenuItem)e.getSource()).getId().equals(Constants.RESET_MEMORY_MENU)){
+            system.reset(true,false);
+        }
+        else if(((MenuItem)e.getSource()).getId().equals(Constants.RESET_CPU_MENU)){
+            system.reset(false,true);
+        }
+        else if(((MenuItem)e.getSource()).getId().equals(Constants.RESETALL_MENU)){
+            system.reset(true,true);
+        }
+        refreshUI();
     }
 
     private class CustomOperandInsertionHandler implements javafx.event.EventHandler<ActionEvent> {

@@ -59,4 +59,8 @@ public class Constants {
 
     /* Other constants */
     public final static String COMMENT_CHARACTER = "#";
+    public static final String LOGGER_NAME = "SIMULATOR_LOGGER";
+    public static final String RESET_MEMORY_MENU = "resetMem";
+    public static final String RESET_CPU_MENU = "resetCpu";
+    public static final String RESETALL_MENU = "resetAll";
 }

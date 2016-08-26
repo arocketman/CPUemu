@@ -112,4 +112,18 @@ public class CPU {
     public void incrementPC4() {
         this.PC += 4;
     }
+
+    /**
+     * Brings the CPU back to its initial state.
+     */
+    public void reset(){
+        for(int i = 0; i < D.size(); i++){
+            D.set(i,0);
+            A.set(i,0);
+        }
+        PC = Memory.INSTRUCTION_AREA;
+        SR = 0;
+        for(byte b : IR)
+            b = 0;
+    }
 }

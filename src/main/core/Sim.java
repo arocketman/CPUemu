@@ -16,7 +16,7 @@ public class Sim {
 
     private CPU cpu;
     private Memory memory;
-    public static final Logger LOGGER = Logger.getLogger("SIMULATOR_LOGGER");
+    public static final Logger LOGGER = Logger.getLogger(Constants.LOGGER_NAME);
 
     public Sim(){
         cpu = new CPU();
@@ -138,5 +138,12 @@ public class Sim {
                 break;
 
         }
+    }
+
+    public void reset(boolean resetMemory, boolean resetCpu) {
+        if(resetMemory)
+            memory.reset();
+        if(resetCpu)
+            cpu.reset();
     }
 }

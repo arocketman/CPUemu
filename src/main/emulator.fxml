@@ -19,6 +19,11 @@
                      <Menu text="Edit">
                          <items>
                              <MenuItem onAction="#editRegister" text="Edit register" />
+
+                             <MenuItem fx:id="resetAll" onAction="#handleReset" text="Reset all" />
+                             <MenuItem fx:id="resetMem" onAction="#handleReset" text="Reset Memory" />
+                             <MenuItem fx:id="resetCpu" onAction="#handleReset" text="Reset CPU" />
+
                          </items>
                      </Menu>
                      <Menu text="Execute">

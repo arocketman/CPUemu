@@ -14,6 +14,13 @@ public class Memory {
 
     public Memory(){
         ram = new byte[MEM_SIZE];
+        reset();
+    }
+
+    /**
+     * Brings the Memory back to its initial state.
+     */
+    public void reset() {
         for(int i = 0; i < MEM_SIZE; i++){
             ram[i] = 00;
         }
