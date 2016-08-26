@@ -69,20 +69,20 @@ public class Sim {
     }
 
     private boolean needsAnotherFetchInstruction(String decodedInstruction) {
-        return  decodedInstruction.equals("MOVR") ||
-                decodedInstruction.equals("ADDR") ||
-                decodedInstruction.equals("SUBR") ||
-                decodedInstruction.equals("ADDI") ||
-                decodedInstruction.equals("MODR") ||
-                decodedInstruction.equals("MODI") ||
-                decodedInstruction.equals("MOVI") ||
-                decodedInstruction.equals("SUBI") ||
-                decodedInstruction.equals("JMPI") ||
-                decodedInstruction.equals("BEQI") ||
-                decodedInstruction.equals("BNEI") ||
-                decodedInstruction.equals("MULR") ||
-                decodedInstruction.equals("MULI") ||
-                decodedInstruction.equals("CMPI");
+        return  decodedInstruction.equals(InstructionSet.ISA_MOVEREGISTER) ||
+                decodedInstruction.equals(InstructionSet.ISA_MOVEIMMEDIATE) ||
+                decodedInstruction.equals(InstructionSet.ISA_ADDREGISTER) ||
+                decodedInstruction.equals(InstructionSet.ISA_SUBTRACTREGISTER) ||
+                decodedInstruction.equals(InstructionSet.ISA_ADDIMMEDIATE) ||
+                decodedInstruction.equals(InstructionSet.ISA_MODREGISTER) ||
+                decodedInstruction.equals(InstructionSet.ISA_MODIMMEDIATE) ||
+                decodedInstruction.equals(InstructionSet.ISA_MULTIPLYREGISTER) ||
+                decodedInstruction.equals(InstructionSet.ISA_MULTIPLYIMMEDIATE) ||
+                decodedInstruction.equals(InstructionSet.ISA_SUBTRACTIMMEDIATE) ||
+                decodedInstruction.equals(InstructionSet.ISA_JUMP) ||
+                decodedInstruction.equals(InstructionSet.ISA_BRANCHEQUAL) ||
+                decodedInstruction.equals(InstructionSet.ISA_BRANCHNOTEQUAL) ||
+                decodedInstruction.equals(InstructionSet.ISA_COMPAREIMMEDIATE);
     }
 
     /**

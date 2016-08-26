@@ -1,5 +1,7 @@
 package main.core;
 
+import java.util.HashMap;
+
 /**
  * This class handles the execution of a given instruction.
  * @author Andrea Capuano
@@ -8,6 +10,22 @@ package main.core;
 public class InstructionSet {
 
     private CPU cpu;
+    HashMap<String,String> g;
+    public final static String ISA_MOVEREGISTER = "MOVR";
+    public final static String ISA_MOVEIMMEDIATE = "MOVI";
+    public final static String ISA_ADDREGISTER = "ADDR";
+    public final static String ISA_ADDIMMEDIATE = "ADDI";
+    public final static String ISA_MULTIPLYREGISTER = "MULR";
+    public final static String ISA_MULTIPLYIMMEDIATE = "MULI";
+    public final static String ISA_MODREGISTER = "MODR";
+    public final static String ISA_MODIMMEDIATE = "MODI";
+    public final static String ISA_SUBTRACTREGISTER = "SUBR";
+    public final static String ISA_SUBTRACTIMMEDIATE = "SUBI";
+    public final static String ISA_COMPAREREGISTER = "CMPR";
+    public final static String ISA_COMPAREIMMEDIATE = "CMPI";
+    public final static String ISA_JUMP = "JMPI";
+    public final static String ISA_BRANCHEQUAL = "BEQI";
+    public final static String ISA_BRANCHNOTEQUAL = "BNEI";
 
     public InstructionSet(CPU cpu){
         this.cpu = cpu;
@@ -17,27 +35,27 @@ public class InstructionSet {
         Integer sourceReg = decodeRegister(source);
         Integer destReg = decodeRegister(destination);
         switch(OP){
-            case "MOVR" :
+            case ISA_MOVEREGISTER :
                 cpu.moveD(sourceReg,destReg);
                 cpu.setSR(sourceReg);
                 break;
-            case "ADDR" :
+            case ISA_ADDREGISTER :
                 cpu.moveD(sourceReg+destReg,destReg);
                 cpu.setSR(sourceReg+destReg);
                 break;
-            case "MULR":
+            case ISA_MULTIPLYREGISTER:
                 cpu.moveD(sourceReg*destReg,destReg);
                 cpu.setSR(sourceReg*destReg);
                 break;
-            case "MODR":
+            case ISA_MODREGISTER:
                 cpu.moveD(sourceReg%destReg,destReg);
                 cpu.setSR(sourceReg % destReg);
                 break;
-            case "SUBR" :
+            case ISA_SUBTRACTREGISTER :
                 cpu.moveD(sourceReg-destReg,destReg);
                 cpu.setSR(sourceReg-destReg);
                 break;
-            case "CMPR":
+            case ISA_COMPAREREGISTER:
                 cpu.setSR(sourceReg-destReg);
                 break;
         }
@@ -47,37 +65,37 @@ public class InstructionSet {
         Integer sourceOp = decodeOperand(source);
         Integer destReg = decodeRegister(destination);
         switch(OP){
-            case "MOVI" :
+            case ISA_MOVEIMMEDIATE :
                 cpu.moveD(sourceOp,destReg);
                 cpu.setSR(sourceOp);
                 break;
-            case "ADDI" :
+            case ISA_ADDIMMEDIATE :
                 cpu.moveD(sourceOp+destReg,destReg);
                 cpu.setSR(sourceOp+destReg);
                 break;
-            case "SUBI" :
+            case ISA_SUBTRACTIMMEDIATE :
                 cpu.moveD(destReg-sourceOp,destReg);
                 cpu.setSR(destReg-sourceOp);
             break;
-            case "MULI":
+            case ISA_MULTIPLYIMMEDIATE:
                 cpu.moveD(sourceOp*destReg,destReg);
                 cpu.setSR(sourceOp*destReg);
                 break;
-            case "MODI":
+            case ISA_MODIMMEDIATE:
                 cpu.moveD(destReg%sourceOp,destReg);
                 cpu.setSR(destReg%sourceOp);
                 break;
-            case "CMPI":
+            case ISA_COMPAREIMMEDIATE:
                 cpu.setSR(sourceOp-destReg);
                 break;
-            case "JMPI":
+            case ISA_JUMP:
                 jmp(sourceOp);
                 break;
-            case "BNEI":
+            case ISA_BRANCHNOTEQUAL:
                 if(!cpu.isFlagZeroHigh())
                     jmp(sourceOp);
                 break;
-            case "BEQI":
+            case ISA_BRANCHEQUAL:
                 if(cpu.isFlagZeroHigh())
                     jmp(sourceOp);
                 break;
