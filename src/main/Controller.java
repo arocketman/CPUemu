@@ -142,6 +142,10 @@ public class Controller {
 
     }
 
+    /**
+     * Executes one Von Neumann's cycle and calls for UI refresh.
+     * @param actionEvent
+     */
     public void stepOver(ActionEvent actionEvent) {
         //Note that this instruction executes exactly one full Von Neumann's cycle.
         system.VonNeumann();
@@ -188,6 +192,9 @@ public class Controller {
         }
     }
 
+    /**
+     * UI Setup for instructions-related components.
+     */
     private void instructionUiSetup() {
 
         instructionComboBox.getItems().addAll(Constants.MOVE_INSTRUCTION,Constants.ADD_INSTRUCTION,Constants.MULTIPLY_INSTRUCTION,Constants.MOD_INSTRUCTION,Constants.BRANCHEQUAL_INSTRUCTION,Constants.BRANCHNOTEQUAL_INSTRUCTION,Constants.SUBTRACT_INSTRUCTION,Constants.JUMP_INSTRUCTION,Constants.COMPARE_INSTRUCTION);
@@ -215,6 +222,9 @@ public class Controller {
         });
     }
 
+    /**
+     * UI Setup for registers related components.
+     */
     private void registersUiSetup() {
         for(int i = 0; i <= 7; i++){
             String AregI="A" + i + "=" + Utils.getHexWithTrailingZeroes(system.getCpu().getA(i));
@@ -234,11 +244,19 @@ public class Controller {
         otherRegsObservable.add(MEM_WRITING_LOCATION,"Mem writes to = " + system.getMemory().getCurrentInstructionAddress());
     }
 
+    /**
+     * Stepsover 1000 times.
+     * @param actionEvent
+     */
     public void step1000(ActionEvent actionEvent) {
         for(int i = 0; i < 1000; i++)
             stepOver(null);
     }
 
+    /**
+     * Starts a thread that steps over the instruction every 200milliseconds.
+     * @param actionEvent
+     */
     public void runProgram(ActionEvent actionEvent){
         Thread runnerThread = new Thread(new ProgramRunner());
         runnerThread.setDaemon(true);
@@ -246,6 +264,10 @@ public class Controller {
         runnerThread.start();
     }
 
+    /**
+     * Sets the runProgram boolean variable to false so that the running runnerThread is stopped.
+     * @param actionEvent
+     */
     public void stopProgram(ActionEvent actionEvent){
         runProgram = false;
     }
@@ -264,6 +286,9 @@ public class Controller {
         refreshUI();
     }
 
+    /**
+     * Handles dialog for insertion of a custom operand.
+     */
     private class CustomOperandInsertionHandler implements javafx.event.EventHandler<ActionEvent> {
         private int oldVal;
 
@@ -282,6 +307,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Thread that runs the program while runProgram remains true.
+     */
     private class ProgramRunner implements Runnable{
 
         @Override

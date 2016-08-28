@@ -1,5 +1,4 @@
 #Find the sum of all the multiples of 3 or 5 below 1000.
-MOVE 1000,D0
 #D3 will hold the result.
 MOVE 0,D3
 #D4 will be our variable to go from 1 to 1000
