@@ -2,7 +2,7 @@
 CPUemu is a CPU emulator based on the MC68000. The emulator is capable of executing simple programs and show their results. 
 
 * [Project structure](#project-structure)  
-* [Instruction format](#instruction-format)
+* [Instruction's format](#instructions-format)
 * [Working instructions](#working-instructions)
 * [Program examples](#program-examples)
 * [Contributing](#contributing)
