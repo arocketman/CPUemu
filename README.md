@@ -1,6 +1,13 @@
 # CPUemu
 CPUemu is a CPU emulator based on the MC68000. The emulator is capable of executing simple programs and show their results. 
-# Project structure
+
+* [Project structure](#project-structure)  
+* [Instruction format](#instruction-format)
+* [Working instructions](#working-instructions)
+* [Program examples](#program-examples)
+* [Contributing](#contributing)
+
+#Project structure
 
 These are the main classes of the system with a brief description:
 
@@ -12,24 +19,26 @@ These are the main classes of the system with a brief description:
 
 There are other utility classes : Utils and Costants.
 
-#Instruction format
+#Instruction's format
 
 As of version 0.1 the instruction format is as follows:
 
 **8** bytes divided in [4 bytes for the instruction , 2 bytes for source operand , 2 bytes for desination operand]
 There are two kinds of instructions:
 
- - Register-register operations (e.g: MOVE D0,D1)
- - Immediate-register operations (e.g: MOVE 12,D1)
+ - **Register-register** operations (e.g: MOVE D0,D1)
+ - **Immediate-register** operations (e.g: MOVE 12,D1)
 
 Register-register operations are transformed as follows:
 
 MOVE -> MOVR
+
 ADD -> ADDR
 
 Immediate-register operations are transformed as follows:
 
 MOVE -> MOVI
+
 ADD -> ADDI
 
 This is an example of how the instruction is saved onto the RAM (MOVE 5,D0): 
@@ -57,8 +66,17 @@ Jump instructions:
 * Branch not equal (BNE 4000)
 * Inconditional Jump (JMP 4000)
 
+Other instructions: 
+
+* Compare instructions with a register (CMP D0,D1)
+* Compare instruction with an immediate operand (CMP 1000,D1)
+
 #Program examples
 
 Program examples can be found in the programExamples folder. To load them you must reset the CPU and memory first then file->load the file.
 
 ![View of a loaded program](http://i.imgur.com/bAhXZgA.png)
+
+#Contributing
+
+Feel free to contribute and to send pull requests, there are still plenty of instructions to be added and features that could be improved.
