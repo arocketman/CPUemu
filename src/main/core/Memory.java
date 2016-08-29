@@ -8,12 +8,10 @@ package main.core;
 public class Memory {
     private byte[] ram;
 
-    public static final int MEM_SIZE = 8000;
-    public static final int INSTRUCTION_AREA = 4000;
     private int currentInstructionAddress;
 
     public Memory(){
-        ram = new byte[MEM_SIZE];
+        ram = new byte[Constants.MEM_SIZE];
         reset();
     }
 
@@ -21,10 +19,10 @@ public class Memory {
      * Brings the Memory back to its initial state.
      */
     public void reset() {
-        for(int i = 0; i < MEM_SIZE; i++){
+        for(int i = 0; i < Constants.MEM_SIZE; i++){
             ram[i] = 00;
         }
-        currentInstructionAddress = INSTRUCTION_AREA;
+        currentInstructionAddress = Constants.INSTRUCTION_AREA;
     }
 
     public int getCurrentInstructionAddress() {

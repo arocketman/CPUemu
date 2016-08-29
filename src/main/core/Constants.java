@@ -1,7 +1,9 @@
 package main.core;
 
 /**
- * Created by Andreuccio on 26/08/2016.
+ * Contains constants that are used all over the project.
+ * @author Andrea Capuano
+ * @version 0.1
  */
 public class Constants {
     /* Registers constants */
@@ -63,4 +65,6 @@ public class Constants {
     public static final String RESET_MEMORY_MENU = "resetMem";
     public static final String RESET_CPU_MENU = "resetCpu";
     public static final String RESETALL_MENU = "resetAll";
+    public static final int MEM_SIZE = 8000;
+    public static final int INSTRUCTION_AREA = 4000;
 }

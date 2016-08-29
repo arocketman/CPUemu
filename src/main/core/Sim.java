@@ -16,7 +16,7 @@ public class Sim {
 
     private CPU cpu;
     private Memory memory;
-    public static final Logger LOGGER = Logger.getLogger(Constants.LOGGER_NAME);
+    private static final Logger LOGGER = Logger.getLogger(Constants.LOGGER_NAME);
 
     public Sim(){
         cpu = new CPU();

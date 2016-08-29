@@ -22,13 +22,13 @@ public class CPU {
         IR = new byte[4];
 
         for(int i = 0; i <= 7; i++){
-            D.add(new Integer(i));
-            A.add(new Integer(i));
+            D.add(i);
+            A.add(i);
         }
         instructionSet = new InstructionSet(this);
 
         //Start the program counter at the first address of the instruction area.
-        PC = Memory.INSTRUCTION_AREA;
+        PC = Constants.INSTRUCTION_AREA;
     }
 
     public InstructionSet getInstructionSet() {
@@ -121,7 +121,7 @@ public class CPU {
             D.set(i,0);
             A.set(i,0);
         }
-        PC = Memory.INSTRUCTION_AREA;
+        PC = Constants.INSTRUCTION_AREA;
         SR = 0;
         for(byte b : IR)
             b = 0;
