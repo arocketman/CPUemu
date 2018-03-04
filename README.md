@@ -7,7 +7,7 @@ CPUemu is a CPU emulator based on the MC68000. The emulator is capable of execut
 * [Program examples](#program-examples)
 * [Contributing](#contributing)
 
-#Project structure
+# Project structure
 
 These are the main classes of the system with a brief description:
 
@@ -19,7 +19,7 @@ These are the main classes of the system with a brief description:
 
 There are other utility classes : Utils and Costants.
 
-#Instruction's format
+# Instruction's format
 
 As of version 0.1 the instruction format is as follows:
 
@@ -77,6 +77,6 @@ Program examples can be found in the programExamples folder. To load them you mu
 
 ![View of a loaded program](http://i.imgur.com/bAhXZgA.png)
 
-#Contributing
+# Contributing
 
 Feel free to contribute and to send pull requests, there are still plenty of instructions to be added and features that could be improved.
