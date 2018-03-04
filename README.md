@@ -71,7 +71,7 @@ Other instructions:
 * Compare instructions with a register (CMP D0,D1)
 * Compare instruction with an immediate operand (CMP 1000,D1)
 
-#Program examples
+# Program examples
 
 Program examples can be found in the programExamples folder. To load them you must reset the CPU and memory first then file->load the file.
 
